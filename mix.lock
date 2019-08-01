@@ -1,0 +1,9 @@
+%{
+  "conv_case": {:hex, :conv_case, "0.2.2", "5a98b74ab8f7ddbad670e5c7bb39ff280e60699aa3b25c7062ceccf48137433c", [:mix], [], "hexpm"},
+  "ex_json_schema": {:hex, :ex_json_schema, "0.6.1", "b57c0588385b8262b80f19d33d9b9b71fcd60d247691abf2635b57a03ec0ad44", [:mix], [], "hexpm"},
+  "jason": {:hex, :jason, "1.1.2", "b03dedea67a99223a2eaf9f1264ce37154564de899fd3d8b9a21b1a6fd64afe7", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
+  "json_xema": {:hex, :json_xema, "0.3.0", "e0a000c068003cc46a4adec421f5571ac54882c7a24be197f40676c358df1f2f", [:mix], [{:conv_case, "~> 0.2", [hex: :conv_case, repo: "hexpm", optional: false]}, {:ex_json_schema, "~> 0.5", [hex: :ex_json_schema, repo: "hexpm", optional: false]}, {:xema, "~> 0.9", [hex: :xema, repo: "hexpm", optional: false]}], "hexpm"},
+  "nex_json_schema": {:hex, :nex_json_schema, "0.8.1", "88176994604610955d5043cd95f2bf3addbc6aea3b858d24386e07a661a39060", [:mix], [], "hexpm"},
+  "nimble_parsec": {:hex, :nimble_parsec, "0.5.0", "90e2eca3d0266e5c53f8fbe0079694740b9c91b6747f2b7e3c5d21966bba8300", [:mix], [], "hexpm"},
+  "xema": {:hex, :xema, "0.9.1", "4485efffbcabebcbb49e4ffc50379e5ea550d1009179dc921da285368798d64e", [:mix], [{:decimal, "~> 1.7", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
+}
