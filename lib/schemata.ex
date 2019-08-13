@@ -4,6 +4,7 @@ defmodule Schemata do
       alias Schemata.Schema
       import Schemata.Definition
       import Schemata.Definitions.Array
+      import Schemata.Definitions.Boolean
       import Schemata.Definitions.Date
       import Schemata.Definitions.Datetime
       import Schemata.Definitions.Enum
@@ -13,6 +14,7 @@ defmodule Schemata do
       import Schemata.Definitions.Ref
       import Schemata.Definitions.Regex
       import Schemata.Definitions.String
+      import Schemata.Definitions.Time
       import Schemata.Definitions.UUID
     end
   end

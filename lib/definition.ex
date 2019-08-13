@@ -1,11 +1,11 @@
 defmodule Schemata.Definition do
   @moduledoc false
 
-  def with_opts(value, opts) when is_list(opts) do
+  def opts(value, opts) when is_list(opts) do
     Map.merge(value, Enum.into(opts, %{}))
   end
 
-  def with_opts(value, opts) when is_map(opts) do
+  def opts(value, opts) when is_map(opts) do
     Map.merge(
       value,
       Enum.into(opts, %{}, fn

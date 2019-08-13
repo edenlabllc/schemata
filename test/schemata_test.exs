@@ -62,7 +62,7 @@ defmodule SchemataTest do
             object(
               %{
                 type: enum(["PASSPORT"]),
-                number: with_opts(string(), minLength: 1),
+                number: opts(string(), minLength: 1),
                 issued_by: %{string() | minLength: 1},
                 issued_at: date()
               },
@@ -74,7 +74,7 @@ defmodule SchemataTest do
               city: ref("name"),
               institution_name: ref("name"),
               issued_date: date(),
-              diploma_number: with_opts(string(), minLength: 1),
+              diploma_number: opts(string(), minLength: 1),
               degree: enum(["PHD"]),
               speciality: ref("name")
             })
