@@ -217,7 +217,7 @@ defmodule NExJsonSchemaTest do
       schema =
         %Schema{
           properties: %{
-            episode: %{object(%{id: string()}) | minProperties: 2}
+            episode: with_opts(object(%{id: string()}), minProperties: 2)
           },
           additionalProperties: false
         }
@@ -240,7 +240,7 @@ defmodule NExJsonSchemaTest do
       schema =
         %Schema{
           properties: %{
-            episode: %{object(%{id: string(), name: string()}) | maxProperties: 1}
+            episode: with_opts(object(%{id: string(), name: string()}), maxProperties: 1)
           },
           additionalProperties: false
         }

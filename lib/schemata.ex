@@ -2,6 +2,7 @@ defmodule Schemata do
   defmacro __using__(_) do
     quote do
       alias Schemata.Schema
+      import Schemata.Definition
       import Schemata.Definitions.Array
       import Schemata.Definitions.Date
       import Schemata.Definitions.Datetime

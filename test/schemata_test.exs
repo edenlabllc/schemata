@@ -74,7 +74,7 @@ defmodule SchemataTest do
               city: ref("name"),
               institution_name: ref("name"),
               issued_date: date(),
-              diploma_number: string("", 1),
+              diploma_number: with_opts(string(), minLength: 1),
               degree: enum(["PHD"]),
               speciality: ref("name")
             })
