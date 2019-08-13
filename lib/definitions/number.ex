@@ -1,8 +1,8 @@
 defmodule Schemata.Definitions.Number do
-  defstruct [:description, :minimum, :exclusiveMinimum, :maximum, :exclusiveMaximum]
+  defstruct [:minimum, :exclusiveMinimum, :maximum, :exclusiveMaximum]
 
-  def number(description \\ "") do
-    %__MODULE__{description: description}
+  def number() do
+    %__MODULE__{}
   end
 end
 
@@ -11,7 +11,7 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Number do
 
   def encode(value, opts) do
     encode_value =
-      %{"type" => "number", "description" => value.description}
+      %{"type" => "number"}
       |> add_not_null_value(value, :minimum)
       |> add_not_null_value(value, :exclusiveMinimum)
       |> add_not_null_value(value, :maximum)

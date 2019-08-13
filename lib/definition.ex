@@ -23,7 +23,7 @@ defmodule Schemata.Definition do
       "" ->
         state
 
-      %{} ->
+      %{} = value when value == %{} ->
         state
 
       value ->

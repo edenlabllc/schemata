@@ -1,8 +1,8 @@
 defmodule Schemata.Definitions.String do
-  defstruct [:description, :minLength, :maxLength]
+  defstruct [:minLength, :maxLength]
 
-  def string(description \\ "") do
-    %__MODULE__{description: description}
+  def string() do
+    %__MODULE__{}
   end
 end
 
@@ -12,7 +12,6 @@ defimpl Jason.Encoder, for: Schemata.Definitions.String do
   def encode(value, opts) do
     encode_value =
       %{"type" => "string"}
-      |> add_not_null_value(value, :description)
       |> add_not_null_value(value, :minLength)
       |> add_not_null_value(value, :maxLength)
 

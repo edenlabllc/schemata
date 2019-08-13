@@ -15,9 +15,9 @@ defmodule SchemataTest do
           episode_id: ref("uuid"),
           encounter_id: ref("uuid"),
           test: enum(["a", "b"]),
-          asserted_date_from: date("Selection start date"),
-          asserted_date_end: date("Selection end date"),
-          medication_code: string("Medication statement's medication code")
+          asserted_date_from: date(),
+          asserted_date_end: date(),
+          medication_code: string()
         },
         additionalProperties: false
       }

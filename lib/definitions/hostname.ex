@@ -1,13 +1,13 @@
 defmodule Schemata.Definitions.Hostname do
-  defstruct [:description]
+  defstruct []
 
-  def hostname(description \\ ""), do: %__MODULE__{description: description}
+  def hostname(), do: %__MODULE__{}
 end
 
 defimpl Jason.Encoder, for: Schemata.Definitions.Hostname do
-  def encode(value, opts) do
+  def encode(_, opts) do
     Jason.Encode.map(
-      %{"type" => "string", "format" => "hostname", "description" => value.description},
+      %{"type" => "string", "format" => "hostname"},
       opts
     )
   end

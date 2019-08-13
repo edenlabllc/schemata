@@ -1,13 +1,13 @@
 defmodule Schemata.Definitions.Date do
-  defstruct [:description]
+  defstruct []
 
-  def date(description \\ ""), do: %__MODULE__{description: description}
+  def date(), do: %__MODULE__{}
 end
 
 defimpl Jason.Encoder, for: Schemata.Definitions.Date do
-  def encode(value, opts) do
+  def encode(_, opts) do
     Jason.Encode.map(
-      %{"type" => "string", "format" => "date", "description" => value.description},
+      %{"type" => "string", "format" => "date"},
       opts
     )
   end
