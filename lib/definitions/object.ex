@@ -23,9 +23,7 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Object do
     encode_value =
       value
       |> Map.take(~w(properties additionalProperties)a)
-      |> Map.merge(%{
-        object: "string"
-      })
+      |> Map.merge(%{type: "object"})
       |> add_not_null_value(value, :dependencies)
       |> add_not_null_value(value, :minProperties)
       |> add_not_null_value(value, :maxProperties)
