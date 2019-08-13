@@ -1,4 +1,4 @@
-defmodule Schemata.Definitions.Reference do
+defmodule Schemata.Definitions.Ref do
   @enforce_keys [:ref]
 
   defstruct [:ref]
@@ -8,7 +8,7 @@ defmodule Schemata.Definitions.Reference do
   end
 end
 
-defimpl Jason.Encoder, for: Schemata.Definitions.Reference do
+defimpl Jason.Encoder, for: Schemata.Definitions.Ref do
   def encode(value, opts) do
     Jason.Encode.map(%{"$ref" => "#/definitions/#{value.ref}"}, opts)
   end

@@ -20,6 +20,12 @@ defmodule Schemata.Definition do
       nil ->
         state
 
+      "" ->
+        state
+
+      %{} ->
+        state
+
       value ->
         Map.put(state, field, value)
     end

@@ -10,7 +10,7 @@ defmodule Schemata do
       import Schemata.Definitions.Hostname
       import Schemata.Definitions.Number
       import Schemata.Definitions.Object
-      import Schemata.Definitions.Reference
+      import Schemata.Definitions.Ref
       import Schemata.Definitions.Regex
       import Schemata.Definitions.String
       import Schemata.Definitions.UUID

@@ -11,7 +11,8 @@ defimpl Jason.Encoder, for: Schemata.Definitions.String do
 
   def encode(value, opts) do
     encode_value =
-      %{"type" => "string", "description" => value.description}
+      %{"type" => "string"}
+      |> add_not_null_value(value, :description)
       |> add_not_null_value(value, :minLength)
       |> add_not_null_value(value, :maxLength)
 
