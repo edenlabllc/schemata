@@ -1,8 +1,10 @@
 defmodule Schemata.Definitions.String do
-  defstruct [:minLength, :maxLength]
+  @moduledoc false
 
-  def string() do
-    %__MODULE__{}
+  defstruct [:minLength, :maxLength, :callbacks]
+
+  def string(callbacks \\ []) do
+    %__MODULE__{callbacks: callbacks}
   end
 end
 

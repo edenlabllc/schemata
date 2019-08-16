@@ -1,7 +1,9 @@
 defmodule Schemata.Definitions.Hostname do
-  defstruct []
+  @moduledoc false
 
-  def hostname(), do: %__MODULE__{}
+  defstruct [:callbacks]
+
+  def hostname(callbacks \\ []), do: %__MODULE__{callbacks: callbacks}
 end
 
 defimpl Jason.Encoder, for: Schemata.Definitions.Hostname do

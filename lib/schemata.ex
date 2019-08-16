@@ -2,6 +2,8 @@ defmodule Schemata do
   defmacro __using__(_) do
     quote do
       alias Schemata.Schema
+      alias Schemata.SchemaValidator
+
       import Schemata.Definition
       import Schemata.Definitions.Array
       import Schemata.Definitions.Boolean
@@ -16,6 +18,8 @@ defmodule Schemata do
       import Schemata.Definitions.String
       import Schemata.Definitions.Time
       import Schemata.Definitions.UUID
+
+      import Schemata.Validators.Equals
     end
   end
 end

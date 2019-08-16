@@ -1,12 +1,15 @@
 defmodule Schemata.Definitions.Enum do
-  @derive Jason.Encoder
+  @moduledoc false
+
+  @derive {Jason.Encoder, only: [:type, :enum]}
 
   @enforce_keys [:enum]
 
   defstruct type: "string",
-            enum: nil
+            enum: nil,
+            callbacks: []
 
-  def enum(values) do
-    %__MODULE__{enum: values}
+  def enum(values, callbacks \\ []) do
+    %__MODULE__{enum: values, callbacks: callbacks}
   end
 end

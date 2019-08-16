@@ -1,5 +1,5 @@
 defmodule Schemata.Definitions.Object do
-  @derive Jason.Encoder
+  @moduledoc false
 
   @enforce_keys [:properties]
 
@@ -9,10 +9,11 @@ defmodule Schemata.Definitions.Object do
             additionalProperties: false,
             dependencies: %{},
             minProperties: nil,
-            maxProperties: nil
+            maxProperties: nil,
+            callbacks: []
 
-  def object(properties, required \\ []) do
-    %__MODULE__{properties: properties, required: required}
+  def object(properties, required \\ [], callbacks \\ []) do
+    %__MODULE__{properties: properties, required: required, callbacks: callbacks}
   end
 end
 

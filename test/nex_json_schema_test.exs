@@ -1,6 +1,7 @@
 defmodule NExJsonSchemaTest do
-  use ExUnit.Case
+  @moduledoc false
 
+  use ExUnit.Case
   use Schemata
   alias NExJsonSchema.Validator
 

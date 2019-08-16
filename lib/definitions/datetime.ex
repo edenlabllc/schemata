@@ -1,7 +1,9 @@
 defmodule Schemata.Definitions.Datetime do
-  defstruct []
+  @moduledoc false
 
-  def datetime(), do: %__MODULE__{}
+  defstruct callbacks: []
+
+  def datetime(callbacks \\ []), do: %__MODULE__{callbacks: callbacks}
 end
 
 defimpl Jason.Encoder, for: Schemata.Definitions.Datetime do

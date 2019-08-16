@@ -1,8 +1,11 @@
 defmodule Schemata.Definitions.UUID do
-  @derive Jason.Encoder
+  @moduledoc false
+
+  @derive {Jason.Encoder, [only: [:type, :pattern]]}
 
   defstruct type: "string",
-            pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            callbacks: []
 
-  def uuid, do: %__MODULE__{}
+  def uuid(callbacks \\ []), do: %__MODULE__{callbacks: callbacks}
 end

@@ -1,8 +1,10 @@
 defmodule Schemata.Definitions.Boolean do
-  defstruct []
+  @moduledoc false
 
-  def boolean() do
-    %__MODULE__{}
+  defstruct callbacks: []
+
+  def boolean(callbacks \\ []) do
+    %__MODULE__{callbacks: callbacks}
   end
 end
 

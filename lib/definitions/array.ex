@@ -1,5 +1,5 @@
 defmodule Schemata.Definitions.Array do
-  @derive Jason.Encoder
+  @moduledoc false
 
   @enforce_keys [:items]
 
@@ -8,10 +8,11 @@ defmodule Schemata.Definitions.Array do
             additionalItems: false,
             minItems: 1,
             maxItems: nil,
-            uniqueItems: false
+            uniqueItems: false,
+            callbacks: []
 
-  def array(items) do
-    %__MODULE__{items: items}
+  def array(items, callbacks \\ []) do
+    %__MODULE__{items: items, callbacks: callbacks}
   end
 end
 
