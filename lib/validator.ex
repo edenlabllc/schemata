@@ -41,17 +41,21 @@ defmodule Schemata.SchemaValidator do
        when is_list(items) do
     case run_callbacks(callbacks, data) do
       :ok ->
-        data
-        |> Enum.with_index()
-        |> Enum.reduce_while(:ok, fn {v, index}, acc ->
-          # additional items should be validated by static validation
-          schema = Enum.at(items, index, array.additionalItems)
+        if is_list(data) do
+          data
+          |> Enum.with_index()
+          |> Enum.reduce_while(:ok, fn {v, index}, acc ->
+            # additional items should be validated by static validation
+            schema = Enum.at(items, index, array.additionalItems)
 
-          case validate_field(schema, v, definitions) do
-            :ok -> {:cont, acc}
-            error -> {:halt, error}
-          end
-        end)
+            case validate_field(schema, v, definitions) do
+              :ok -> {:cont, acc}
+              error -> {:halt, error}
+            end
+          end)
+        else
+          :ok
+        end
 
       error ->
         error
@@ -61,12 +65,16 @@ defmodule Schemata.SchemaValidator do
   defp validate_field(%Array{callbacks: callbacks, items: item}, data, definitions) do
     case run_callbacks(callbacks, data) do
       :ok ->
-        Enum.reduce_while(data, :ok, fn v, acc ->
-          case validate_field(item, v, definitions) do
-            :ok -> {:cont, acc}
-            error -> {:halt, error}
-          end
-        end)
+        if is_list(data) do
+          Enum.reduce_while(data, :ok, fn v, acc ->
+            case validate_field(item, v, definitions) do
+              :ok -> {:cont, acc}
+              error -> {:halt, error}
+            end
+          end)
+        else
+          :ok
+        end
 
       error ->
         error

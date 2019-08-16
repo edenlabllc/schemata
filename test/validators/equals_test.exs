@@ -28,6 +28,10 @@ defmodule Schemata.Validators.EqualsTest do
                  }
                }
                |> SchemaValidator.validate(%{"foo" => ["bar", 50]})
+
+      assert :ok ==
+               %Schema{properties: %{foo: opts(array(string()), minItems: 0)}}
+               |> SchemaValidator.validate(%{"foo" => []})
     end
 
     test "boolean" do
@@ -138,6 +142,16 @@ defmodule Schemata.Validators.EqualsTest do
                    }
                  },
                  %{"foo" => %{"bar" => "ba"}}
+               )
+
+      assert :ok ==
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     foo: object(%{bar: string()})
+                   }
+                 },
+                 %{"foo" => %{"bar" => "baz"}}
                )
     end
 
