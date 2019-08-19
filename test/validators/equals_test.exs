@@ -290,4 +290,43 @@ defmodule Schemata.Validators.EqualsTest do
                )
     end
   end
+
+  describe "test error paths" do
+    test "nested error path" do
+      assert "error: $.foo.bar.0.baz" ==
+               %Schema{
+                 properties: %{
+                   foo: object(%{bar: array(object(%{baz: string(callbacks: [equals("a")])}))})
+                 }
+               }
+               |> SchemaValidator.validate(%{"foo" => %{"bar" => [%{"baz" => "b"}]}})
+    end
+
+    test "ref path" do
+      assert "error: $.foo.bar.b" ==
+               %Schema{
+                 definitions: %{
+                   a: object(%{b: ref("b")}),
+                   b: string(callbacks: [equals("b")])
+                 },
+                 properties: %{
+                   foo: object(%{bar: ref("a")})
+                 }
+               }
+               |> SchemaValidator.validate(%{"foo" => %{"bar" => %{"b" => "a"}}})
+    end
+
+    test "message is a function" do
+      assert "$.foo.bar" ==
+               %Schema{
+                 properties: %{
+                   foo:
+                     object(%{
+                       bar: string(callbacks: [equals("a", fn _, path -> path end)])
+                     })
+                 }
+               }
+               |> SchemaValidator.validate(%{"foo" => %{"bar" => "b"}})
+    end
+  end
 end
