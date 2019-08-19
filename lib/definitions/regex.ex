@@ -7,7 +7,8 @@ defmodule Schemata.Definitions.Regex do
 
   defstruct type: "string",
             pattern: nil,
-            callbacks: []
+            opts: [callbacks: []]
 
-  def regex(pattern, callbacks \\ []), do: %__MODULE__{pattern: pattern, callbacks: callbacks}
+  def regex(pattern), do: %__MODULE__{pattern: pattern}
+  def regex(pattern, opts), do: %__MODULE__{pattern: pattern, opts: opts}
 end

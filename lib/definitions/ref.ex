@@ -3,10 +3,14 @@ defmodule Schemata.Definitions.Ref do
 
   @enforce_keys [:ref]
 
-  defstruct [:ref, :callbacks]
+  defstruct [:ref, opts: [callbacks: []]]
 
-  def ref(ref, callbacks \\ []) do
-    %__MODULE__{ref: ref, callbacks: callbacks}
+  def ref(ref) do
+    %__MODULE__{ref: ref}
+  end
+
+  def ref(ref, opts) do
+    %__MODULE__{ref: ref, opts: opts}
   end
 end
 

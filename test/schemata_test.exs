@@ -54,19 +54,21 @@ defmodule SchemataTest do
             regex("^(?!.*[ЫЪЭЁыъэё@%&$^#])[a-zA-ZА-ЯҐЇІЄа-яґїіє0-9№\\\"!\\^\\*)\\]\\[(._-].*$"),
           person_name: regex("^(?!.*[ЫЪЭЁыъэё@%&$^#])[А-ЯҐЇІЄа-яґїіє’\\'\\- ]+$"),
           phone:
-            object(%{type: enum(["mobile"]), number: regex("^\\+38[0-9]{10}$")}, [
-              "type",
-              "number"
-            ]),
+            object(%{type: enum(["mobile"]), number: regex("^\\+38[0-9]{10}$")},
+              required: [
+                "type",
+                "number"
+              ]
+            ),
           document:
             object(
               %{
                 type: enum(["PASSPORT"]),
-                number: opts(string(), minLength: 1),
-                issued_by: %{string() | minLength: 1},
+                number: string(minLength: 1),
+                issued_by: string(minLength: 1),
                 issued_at: date()
               },
-              ["type", "number"]
+              required: ["type", "number"]
             ),
           education:
             object(%{
@@ -74,7 +76,7 @@ defmodule SchemataTest do
               city: ref("name"),
               institution_name: ref("name"),
               issued_date: date(),
-              diploma_number: opts(string(), minLength: 1),
+              diploma_number: string(minLength: 1),
               degree: enum(["PHD"]),
               speciality: ref("name")
             })

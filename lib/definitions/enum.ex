@@ -7,9 +7,13 @@ defmodule Schemata.Definitions.Enum do
 
   defstruct type: "string",
             enum: nil,
-            callbacks: []
+            opts: [callbacks: []]
 
-  def enum(values, callbacks \\ []) do
-    %__MODULE__{enum: values, callbacks: callbacks}
+  def enum(values) do
+    %__MODULE__{enum: values}
+  end
+
+  def enum(values, opts) do
+    %__MODULE__{enum: values, opts: opts}
   end
 end

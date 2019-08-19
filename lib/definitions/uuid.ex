@@ -5,7 +5,8 @@ defmodule Schemata.Definitions.UUID do
 
   defstruct type: "string",
             pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-            callbacks: []
+            opts: [callbacks: []]
 
-  def uuid(callbacks \\ []), do: %__MODULE__{callbacks: callbacks}
+  def uuid(), do: %__MODULE__{}
+  def uuid(opts), do: %__MODULE__{opts: opts}
 end

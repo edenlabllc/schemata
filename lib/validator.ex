@@ -24,7 +24,7 @@ defmodule Schemata.SchemaValidator do
     end
   end
 
-  defp run_callbacks(callbacks, data) do
+  defp run_callbacks([_ | _] = callbacks, data) do
     Enum.reduce_while(callbacks, :ok, fn callback, acc ->
       case Schemata.Validator.validate(callback, data) do
         :ok -> {:cont, acc}
@@ -33,20 +33,22 @@ defmodule Schemata.SchemaValidator do
     end)
   end
 
+  defp run_callbacks(_, _), do: :ok
+
   defp validate_field(
-         %Array{callbacks: callbacks, items: [_ | _] = items} = array,
+         %Array{opts: opts, items: [_ | _] = items} = array,
          data,
          definitions
        )
        when is_list(items) do
-    case run_callbacks(callbacks, data) do
+    case run_callbacks(Keyword.get(opts, :callbacks), data) do
       :ok ->
         if is_list(data) do
           data
           |> Enum.with_index()
           |> Enum.reduce_while(:ok, fn {v, index}, acc ->
             # additional items should be validated by static validation
-            schema = Enum.at(items, index, array.additionalItems)
+            schema = Enum.at(items, index, Keyword.get(array.opts, :additionalItems, []))
 
             case validate_field(schema, v, definitions) do
               :ok -> {:cont, acc}
@@ -62,8 +64,8 @@ defmodule Schemata.SchemaValidator do
     end
   end
 
-  defp validate_field(%Array{callbacks: callbacks, items: item}, data, definitions) do
-    case run_callbacks(callbacks, data) do
+  defp validate_field(%Array{opts: opts, items: item}, data, definitions) do
+    case run_callbacks(Keyword.get(opts, :callbacks), data) do
       :ok ->
         if is_list(data) do
           Enum.reduce_while(data, :ok, fn v, acc ->
@@ -81,8 +83,8 @@ defmodule Schemata.SchemaValidator do
     end
   end
 
-  defp validate_field(%Ref{ref: ref, callbacks: callbacks}, data, definitions) do
-    case run_callbacks(callbacks, data) do
+  defp validate_field(%Ref{ref: ref, opts: opts}, data, definitions) do
+    case run_callbacks(Keyword.get(opts, :callbacks), data) do
       :ok ->
         definition = Map.get(definitions, String.to_atom(ref))
         validate_field(definition, data, definitions)
@@ -92,8 +94,8 @@ defmodule Schemata.SchemaValidator do
     end
   end
 
-  defp validate_field(%Object{callbacks: callbacks} = object, data, definitions) do
-    case run_callbacks(callbacks, data) do
+  defp validate_field(%Object{opts: opts} = object, data, definitions) do
+    case run_callbacks(Keyword.get(opts, :callbacks), data) do
       :ok ->
         Enum.reduce_while(object.properties, :ok, fn {k, v}, acc ->
           case validate_field(v, data[to_string(k)], definitions) do
@@ -107,7 +109,9 @@ defmodule Schemata.SchemaValidator do
     end
   end
 
-  defp validate_field(%{callbacks: callbacks}, data, _), do: run_callbacks(callbacks, data)
+  defp validate_field(%{opts: opts}, data, _) do
+    run_callbacks(Keyword.get(opts, :callbacks), data)
+  end
 end
 
 defprotocol Schemata.Validator do

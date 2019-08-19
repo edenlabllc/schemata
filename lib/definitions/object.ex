@@ -5,15 +5,21 @@ defmodule Schemata.Definitions.Object do
 
   defstruct type: "object",
             properties: nil,
-            required: [],
-            additionalProperties: false,
-            dependencies: %{},
-            minProperties: nil,
-            maxProperties: nil,
-            callbacks: []
+            opts: [
+              required: [],
+              additionalProperties: false,
+              dependencies: %{},
+              minProperties: nil,
+              maxProperties: nil,
+              callbacks: []
+            ]
 
-  def object(properties, required \\ [], callbacks \\ []) do
-    %__MODULE__{properties: properties, required: required, callbacks: callbacks}
+  def object(properties) do
+    %__MODULE__{properties: properties}
+  end
+
+  def object(properties, opts) do
+    %__MODULE__{properties: properties, opts: opts}
   end
 end
 
@@ -23,18 +29,13 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Object do
   def encode(value, opts) do
     encode_value =
       value
-      |> Map.take(~w(properties additionalProperties)a)
+      |> Map.take(~w(properties)a)
       |> Map.merge(%{type: "object"})
+      |> add_not_null_value(value, :additionalProperties)
       |> add_not_null_value(value, :dependencies)
       |> add_not_null_value(value, :minProperties)
       |> add_not_null_value(value, :maxProperties)
-
-    encode_value =
-      if value.required && !Enum.empty?(value.required) do
-        Map.put(encode_value, "required", value.required)
-      else
-        encode_value
-      end
+      |> add_not_null_value(value, :required)
 
     Jason.Encode.map(encode_value, opts)
   end

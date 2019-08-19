@@ -1,10 +1,14 @@
 defmodule Schemata.Definitions.Number do
   @moduledoc false
 
-  defstruct [:minimum, :exclusiveMinimum, :maximum, :exclusiveMaximum, :callbacks]
+  defstruct opts: [callbacks: []]
 
-  def number(callbacks \\ []) do
-    %__MODULE__{callbacks: callbacks}
+  def number() do
+    %__MODULE__{}
+  end
+
+  def number(opts) do
+    %__MODULE__{opts: opts}
   end
 end
 

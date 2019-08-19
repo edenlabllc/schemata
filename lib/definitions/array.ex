@@ -5,14 +5,20 @@ defmodule Schemata.Definitions.Array do
 
   defstruct type: "array",
             items: nil,
-            additionalItems: false,
-            minItems: 1,
-            maxItems: nil,
-            uniqueItems: false,
-            callbacks: []
+            opts: [
+              additionalItems: false,
+              minItems: 1,
+              maxItems: nil,
+              uniqueItems: false,
+              callbacks: []
+            ]
 
-  def array(items, callbacks \\ []) do
-    %__MODULE__{items: items, callbacks: callbacks}
+  def array(items) do
+    %__MODULE__{items: items}
+  end
+
+  def array(items, opts) do
+    %__MODULE__{items: items, opts: opts}
   end
 end
 
@@ -22,7 +28,9 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Array do
   def encode(value, opts) do
     encode_value =
       value
-      |> Map.take(~w(type items additionalItems uniqueItems)a)
+      |> Map.take(~w(type items)a)
+      |> add_not_null_value(value, :additionalItems)
+      |> add_not_null_value(value, :uniqueItems)
       |> add_not_null_value(value, :minItems)
       |> add_not_null_value(value, :maxItems)
 

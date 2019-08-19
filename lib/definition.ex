@@ -1,26 +1,17 @@
 defmodule Schemata.Definition do
   @moduledoc false
 
-  def opts(value, opts) when is_list(opts) do
-    Map.merge(value, Enum.into(opts, %{}))
-  end
-
-  def opts(value, opts) when is_map(opts) do
-    Map.merge(
-      value,
-      Enum.into(opts, %{}, fn
-        {k, v} when is_binary(k) -> {String.to_atom(k), v}
-        {k, v} when is_atom(k) -> {k, v}
-      end)
-    )
-  end
-
   def add_not_null_value(state, data, field) do
-    case Map.get(data, field) do
+    opts = data.opts
+
+    case Keyword.get(opts, field) do
       nil ->
         state
 
       "" ->
+        state
+
+      [] = value when value == [] ->
         state
 
       %{} = value when value == %{} ->
