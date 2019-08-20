@@ -19,7 +19,8 @@ defmodule Schemata.Definitions.Object do
   end
 
   def object(properties, opts) do
-    %__MODULE__{properties: properties, opts: opts}
+    obj = %__MODULE__{properties: properties}
+    %{obj | opts: Keyword.merge(obj.opts, opts)}
   end
 end
 

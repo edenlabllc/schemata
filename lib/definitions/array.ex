@@ -18,7 +18,8 @@ defmodule Schemata.Definitions.Array do
   end
 
   def array(items, opts) do
-    %__MODULE__{items: items, opts: opts}
+    arr = %__MODULE__{items: items}
+    %{arr | opts: Keyword.merge(arr.opts, opts)}
   end
 end
 

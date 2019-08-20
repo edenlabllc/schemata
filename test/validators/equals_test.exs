@@ -293,7 +293,7 @@ defmodule Schemata.Validators.EqualsTest do
 
   describe "test error paths" do
     test "nested error path" do
-      assert "error: $.foo.bar.0.baz" ==
+      assert :error ==
                %Schema{
                  properties: %{
                    foo: object(%{bar: array(object(%{baz: string(callbacks: [equals("a")])}))})
@@ -303,7 +303,7 @@ defmodule Schemata.Validators.EqualsTest do
     end
 
     test "ref path" do
-      assert "error: $.foo.bar.b" ==
+      assert :error ==
                %Schema{
                  definitions: %{
                    a: object(%{b: ref("b")}),
