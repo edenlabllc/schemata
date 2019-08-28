@@ -11,7 +11,8 @@ defmodule Schemata.Definitions.Object do
               dependencies: %{},
               minProperties: nil,
               maxProperties: nil,
-              callbacks: []
+              callbacks: [],
+              null: false
             ]
 
   def object(properties) do
@@ -31,7 +32,7 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Object do
     encode_value =
       value
       |> Map.take(~w(properties)a)
-      |> Map.merge(%{type: "object"})
+      |> add_type(value, "object")
       |> add_not_null_value(value, :additionalProperties)
       |> add_not_null_value(value, :dependencies)
       |> add_not_null_value(value, :minProperties)

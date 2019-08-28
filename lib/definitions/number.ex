@@ -1,7 +1,7 @@
 defmodule Schemata.Definitions.Number do
   @moduledoc false
 
-  defstruct opts: [callbacks: []]
+  defstruct opts: [callbacks: [], null: false]
 
   def number() do
     %__MODULE__{}
@@ -17,7 +17,8 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Number do
 
   def encode(value, opts) do
     encode_value =
-      %{"type" => "number"}
+      %{}
+      |> add_type(value, "number")
       |> add_not_null_value(value, :minimum)
       |> add_not_null_value(value, :exclusiveMinimum)
       |> add_not_null_value(value, :maximum)

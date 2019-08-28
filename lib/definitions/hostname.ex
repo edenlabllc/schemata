@@ -1,7 +1,7 @@
 defmodule Schemata.Definitions.Hostname do
   @moduledoc false
 
-  defstruct opts: [callbacks: []]
+  defstruct opts: [callbacks: [], null: false]
 
   def hostname() do
     %__MODULE__{}
@@ -13,9 +13,11 @@ defmodule Schemata.Definitions.Hostname do
 end
 
 defimpl Jason.Encoder, for: Schemata.Definitions.Hostname do
-  def encode(_, opts) do
+  import Schemata.Definition
+
+  def encode(value, opts) do
     Jason.Encode.map(
-      %{"type" => "string", "format" => "hostname"},
+      add_type(%{"format" => "hostname"}, value, "string"),
       opts
     )
   end

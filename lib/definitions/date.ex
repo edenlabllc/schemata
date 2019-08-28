@@ -1,7 +1,7 @@
 defmodule Schemata.Definitions.Date do
   @moduledoc false
 
-  defstruct opts: [callbacks: []]
+  defstruct opts: [callbacks: [], null: false]
 
   def date() do
     %__MODULE__{}
@@ -13,9 +13,11 @@ defmodule Schemata.Definitions.Date do
 end
 
 defimpl Jason.Encoder, for: Schemata.Definitions.Date do
-  def encode(_, opts) do
+  import Schemata.Definition
+
+  def encode(value, opts) do
     Jason.Encode.map(
-      %{"type" => "string", "format" => "date"},
+      add_type(%{"format" => "date"}, value, "string"),
       opts
     )
   end

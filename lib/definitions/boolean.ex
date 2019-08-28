@@ -1,7 +1,7 @@
 defmodule Schemata.Definitions.Boolean do
   @moduledoc false
 
-  defstruct opts: [callbacks: []]
+  defstruct opts: [callbacks: [], null: false]
 
   def boolean() do
     %__MODULE__{}
@@ -13,8 +13,10 @@ defmodule Schemata.Definitions.Boolean do
 end
 
 defimpl Jason.Encoder, for: Schemata.Definitions.Boolean do
-  def encode(_, opts) do
-    encode_value = %{"type" => "boolean"}
+  import Schemata.Definition
+
+  def encode(value, opts) do
+    encode_value = add_type(%{}, value, "boolean")
     Jason.Encode.map(encode_value, opts)
   end
 end

@@ -1,7 +1,7 @@
 defmodule Schemata.Definitions.String do
   @moduledoc false
 
-  defstruct opts: [callbacks: []]
+  defstruct opts: [callbacks: [], null: false]
 
   def string() do
     %__MODULE__{}
@@ -17,7 +17,7 @@ defimpl Jason.Encoder, for: Schemata.Definitions.String do
 
   def encode(value, opts) do
     encode_value =
-      %{"type" => "string"}
+      add_type(%{}, value, "string")
       |> add_not_null_value(value, :minLength)
       |> add_not_null_value(value, :maxLength)
 

@@ -21,4 +21,10 @@ defmodule Schemata.Definition do
         Map.put(state, field, value)
     end
   end
+
+  def add_type(state, data, default) do
+    opts = data.opts
+    type = if Keyword.get(opts, :null), do: [default, "null"], else: default
+    Map.merge(state, %{type: type})
+  end
 end
