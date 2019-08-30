@@ -20,7 +20,11 @@ defmodule NullableFieldsTest do
             regex: regex("/[abc]{2}/", null: true),
             string: string(null: true),
             time: time(null: true),
-            uuid: uuid(null: true)
+            uuid: uuid(null: true),
+            foo:
+              %{}
+              |> object()
+              |> null()
           },
           additionalProperties: false
         }
@@ -40,7 +44,8 @@ defmodule NullableFieldsTest do
                  "regex" => nil,
                  "string" => nil,
                  "time" => nil,
-                 "uuid" => nil
+                 "uuid" => nil,
+                 "foo" => nil
                })
     end
   end

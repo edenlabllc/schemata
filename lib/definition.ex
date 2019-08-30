@@ -27,4 +27,9 @@ defmodule Schemata.Definition do
     type = if Keyword.get(opts, :null), do: [default, "null"], else: default
     Map.merge(state, %{type: type})
   end
+
+  def null(definition, value \\ true) do
+    opts = definition.opts
+    %{definition | opts: Keyword.put(opts, :null, value)}
+  end
 end
