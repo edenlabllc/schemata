@@ -7,6 +7,8 @@ defmodule Schemata.Schema do
             dependencies: %{},
             properties: %{},
             required: [],
+            minProperties: nil,
+            maxProperties: nil,
             additionalProperties: false
 end
 
@@ -24,6 +26,20 @@ defimpl Jason.Encoder, for: Schemata.Schema do
     encode_value =
       if value.definitions && !Enum.empty?(value.definitions) do
         Map.put(encode_value, "definitions", value.definitions)
+      else
+        encode_value
+      end
+
+    encode_value =
+      if !is_nil(value.minProperties) do
+        Map.put(encode_value, "minProperties", value.minProperties)
+      else
+        encode_value
+      end
+
+    encode_value =
+      if !is_nil(value.maxProperties) do
+        Map.put(encode_value, "maxProperties", value.maxProperties)
       else
         encode_value
       end
