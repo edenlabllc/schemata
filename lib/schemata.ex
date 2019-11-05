@@ -9,8 +9,10 @@ defmodule Schemata do
       import Schemata.Definitions.Boolean
       import Schemata.Definitions.Date
       import Schemata.Definitions.Datetime
+      import Schemata.Definitions.Email
       import Schemata.Definitions.Enum
       import Schemata.Definitions.Hostname
+      import Schemata.Definitions.Integer
       import Schemata.Definitions.Number
       import Schemata.Definitions.Object
       import Schemata.Definitions.Ref
