@@ -241,6 +241,16 @@ defmodule Schemata.Validators.EqualsTest do
                  %{"foo" => "b"}
                )
 
+      assert :ok ==
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     foo: regex("[abc]", minLength: 3, maxLength: 10)
+                   }
+                 },
+                 %{"foo" => "abcabc"}
+               )
+
       assert {:error,
               [
                 {%{
