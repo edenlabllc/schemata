@@ -240,6 +240,54 @@ defmodule Schemata.Validators.EqualsTest do
                  },
                  %{"foo" => "b"}
                )
+
+      assert :ok ==
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     foo: regex("[abc]", minLength: 3, maxLength: 10)
+                   }
+                 },
+                 %{"foo" => "abcabc"}
+               )
+
+      assert {:error,
+              [
+                {%{
+                   description: "expected value to have a minimum length of 3 but was 1",
+                   params: %{actual: 1, min: 3},
+                   raw_description:
+                     "expected value to have a minimum length of %{min} but was %{actual}",
+                   rule: :length
+                 }, "$.foo"}
+              ]} ==
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     foo: regex("[abc]", minLength: 3, maxLength: 10)
+                   }
+                 },
+                 %{"foo" => "b"}
+               )
+
+      assert {:error,
+              [
+                {%{
+                   description: "expected value to have a maximum length of 10 but was 11",
+                   params: %{actual: 11, max: 10},
+                   raw_description:
+                     "expected value to have a maximum length of %{max} but was %{actual}",
+                   rule: :length
+                 }, "$.foo"}
+              ]} ==
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     foo: regex("[abc]", minLength: 3, maxLength: 10)
+                   }
+                 },
+                 %{"foo" => "bbbbbbbbbbb"}
+               )
     end
 
     test "time" do
