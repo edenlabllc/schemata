@@ -11,7 +11,7 @@ defmodule Schemata.Validators.EqualsTest do
                |> SchemaValidator.validate(%{"foo" => ["a", "b"]})
 
       assert :ok ==
-               %Schema{properties: %{foo: array(nil, callbacks: [equals(~w(a b))])}}
+               %Schema{properties: %{foo: array(nil)}}
                |> SchemaValidator.validate(%{"foo" => ["a", {:ok, %{}}]})
 
       assert {:error,
