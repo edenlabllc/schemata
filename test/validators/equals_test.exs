@@ -22,8 +22,8 @@ defmodule Schemata.Validators.EqualsTest do
                    rule: :length
                  }, "$.foo"}
               ]} =
-               %Schema{properties: %{foo: array(nil, callbacks: [equals(~w(a b))], minItems: 3)}}
-               |> SchemaValidator.validate(%{"foo" => ["a", "b"]})
+               %Schema{properties: %{foo: array(nil, minItems: 3)}}
+               |> SchemaValidator.validate(%{"foo" => ["a", {:ok, 1}]})
 
       assert {:error,
               [
@@ -34,7 +34,7 @@ defmodule Schemata.Validators.EqualsTest do
                  }, "$.foo"}
               ]} =
                %Schema{properties: %{foo: array(nil, callbacks: [equals(~w(a b))], maxItems: 1)}}
-               |> SchemaValidator.validate(%{"foo" => ["a", "b"]})
+               |> SchemaValidator.validate(%{"foo" => ["a", %{}]})
 
       assert {:error, "invalid value"} ==
                %Schema{
