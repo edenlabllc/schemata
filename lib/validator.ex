@@ -117,6 +117,10 @@ defmodule Schemata.SchemaValidator do
   defp validate_field(%{opts: opts}, data, _, path) do
     run_callbacks(Keyword.get(opts, :callbacks), data, path)
   end
+
+  defp validate_field(nil, _, _, _) do
+    :ok
+  end
 end
 
 defprotocol Schemata.Validator do
