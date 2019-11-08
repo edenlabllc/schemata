@@ -18,7 +18,7 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Regex do
     encode_value =
       value
       |> Map.take(~w(pattern)a)
-      |> add_type(value, "string")
+      |> add_type(value, value.type)
       |> add_not_null_value(value, :minLength)
       |> add_not_null_value(value, :maxLength)
 
