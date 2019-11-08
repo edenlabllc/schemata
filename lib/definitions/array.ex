@@ -1,8 +1,6 @@
 defmodule Schemata.Definitions.Array do
   @moduledoc false
 
-  @enforce_keys [:items]
-
   defstruct type: "array",
             items: nil,
             opts: [
@@ -30,7 +28,7 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Array do
   def encode(value, opts) do
     encode_value =
       value
-      |> Map.take(~w(items)a)
+      |> encoded_data()
       |> add_type(value, "array")
       |> add_not_null_value(value, :additionalItems)
       |> add_not_null_value(value, :uniqueItems)
@@ -39,4 +37,7 @@ defimpl Jason.Encoder, for: Schemata.Definitions.Array do
 
     Jason.Encode.map(encode_value, opts)
   end
+
+  defp encoded_data(%{items: nil}), do: %{}
+  defp encoded_data(%{items: items}), do: %{items: items}
 end
