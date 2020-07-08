@@ -1,9 +1,9 @@
 %{
-  "conv_case": {:hex, :conv_case, "0.2.2", "5a98b74ab8f7ddbad670e5c7bb39ff280e60699aa3b25c7062ceccf48137433c", [:mix], [], "hexpm"},
+  "conv_case": {:hex, :conv_case, "0.2.2", "5a98b74ab8f7ddbad670e5c7bb39ff280e60699aa3b25c7062ceccf48137433c", [:mix], [], "hexpm", "561c550ab6d55b2a4d4c14449e58c9957798613eb26ea182e14a962965377bca"},
   "ex_json_schema": {:hex, :ex_json_schema, "0.6.1", "b57c0588385b8262b80f19d33d9b9b71fcd60d247691abf2635b57a03ec0ad44", [:mix], [], "hexpm"},
-  "jason": {:hex, :jason, "1.1.2", "b03dedea67a99223a2eaf9f1264ce37154564de899fd3d8b9a21b1a6fd64afe7", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
-  "json_xema": {:hex, :json_xema, "0.3.3", "3ed7cc3df78913a9a952c9a15a7f44a4309f25fcc1ee1782531228f6cbed7943", [:mix], [{:conv_case, "~> 0.2", [hex: :conv_case, repo: "hexpm", optional: false]}, {:xema, "~> 0.9", [hex: :xema, repo: "hexpm", optional: false]}], "hexpm"},
-  "nex_json_schema": {:hex, :nex_json_schema, "0.8.1", "88176994604610955d5043cd95f2bf3addbc6aea3b858d24386e07a661a39060", [:mix], [], "hexpm"},
+  "jason": {:hex, :jason, "1.1.2", "b03dedea67a99223a2eaf9f1264ce37154564de899fd3d8b9a21b1a6fd64afe7", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "fdf843bca858203ae1de16da2ee206f53416bbda5dc8c9e78f43243de4bc3afe"},
+  "json_xema": {:hex, :json_xema, "0.3.3", "3ed7cc3df78913a9a952c9a15a7f44a4309f25fcc1ee1782531228f6cbed7943", [:mix], [{:conv_case, "~> 0.2", [hex: :conv_case, repo: "hexpm", optional: false]}, {:xema, "~> 0.9", [hex: :xema, repo: "hexpm", optional: false]}], "hexpm", "882e27a99d02f30626d1bfa802345beb2d5b84d74f71130b98bcb0b65e2b772b"},
+  "nex_json_schema": {:hex, :nex_json_schema, "0.8.3", "b686a34904ad810ed1f874fe0d90b81819aa96fb14e44efd759479c2d5229a4a", [:mix], [], "hexpm", "fea24be0f95352b1a2fe3317ef166499207afec6fc95219f47efb8df805e63b1"},
   "nimble_parsec": {:hex, :nimble_parsec, "0.5.0", "90e2eca3d0266e5c53f8fbe0079694740b9c91b6747f2b7e3c5d21966bba8300", [:mix], [], "hexpm"},
-  "xema": {:hex, :xema, "0.9.3", "68261f2e04e852b3b5ca32e938f3007811c693e55ad5e17f9591f2ba410620d2", [:mix], [{:decimal, "~> 1.7", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
+  "xema": {:hex, :xema, "0.9.3", "68261f2e04e852b3b5ca32e938f3007811c693e55ad5e17f9591f2ba410620d2", [:mix], [{:decimal, "~> 1.7", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "4ac8535292b26958c634680fd5303325757389fd83951dc4660b45c2b7285822"},
 }
