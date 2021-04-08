@@ -17,6 +17,7 @@ defmodule Schemata.Definitions.Enum do
   end
 
   def enum(values, opts) do
+    opts = Keyword.merge([callbacks: []], opts)
     nullable? = Keyword.get(opts, :null)
     type = if nullable?, do: ["string", "null"], else: "string"
     values = if nullable?, do: values ++ [nil], else: values
