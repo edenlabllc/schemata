@@ -23,7 +23,7 @@ defmodule Schemata.MixProject do
     [
       {:jason, "~> 1.1"},
       {:json_xema, "~> 0.3.3", optional: true},
-      {:nex_json_schema, "~> 0.8.4"}
+      {:nex_json_schema, "~> 0.8.5"}
     ]
   end
 end

@@ -468,7 +468,7 @@ defmodule NExJsonSchemaTest do
       schema =
         %Schema{
           properties: %{
-            value: number(minimum: 5, exclusiveMinimum: false, multipleOf: 0.01)
+            value: number(minimum: 25, exclusiveMinimum: false, multipleOf: 0.1)
           },
           additionalProperties: false
         }
@@ -479,19 +479,19 @@ defmodule NExJsonSchemaTest do
       assert {:error,
               [
                 {%{
-                   description: "expected the value to be >= 5",
-                   params: %{greater_than_or_equal_to: 5},
+                   description: "expected the value to be >= 25",
+                   params: %{greater_than_or_equal_to: 25},
                    raw_description: "expected the value to be >= %{greater_than_or_equal_to}",
                    rule: :number
                  }, "$.value"},
                 {%{
-                   description: "expected value to be a multiple of 0.01 but got 2.002",
-                   params: %{actual: 2.002, multiple_of: 0.01},
+                   description: "expected value to be a multiple of 0.1 but got 18.65",
+                   params: %{actual: 18.65, multiple_of: 0.1},
                    raw_description:
                      "expected value to be a multiple of %{multiple_of} but got %{actual}",
                    rule: :number
                  }, "$.value"}
-              ]} = Validator.validate(schema, %{"value" => 2.002})
+              ]} = Validator.validate(schema, %{"value" => 18.65})
     end
 
     test "maximum" do
