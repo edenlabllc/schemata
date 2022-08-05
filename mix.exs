@@ -21,9 +21,9 @@ defmodule Schemata.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:jason, "~> 1.1"},
-      {:json_xema, "~> 0.3.3", optional: true},
-      {:nex_json_schema, "~> 0.8.5"}
+      {:jason, "~> 1.2.2"},
+      {:json_xema, "~> 0.6.1", optional: true},
+      {:nex_json_schema, "~> 0.8.6"}
     ]
   end
 end
