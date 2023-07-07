@@ -15,6 +15,7 @@ defmodule Schemata do
       import Schemata.Definitions.Integer
       import Schemata.Definitions.Number
       import Schemata.Definitions.Object
+      import Schemata.Definitions.OneOf
       import Schemata.Definitions.Ref
       import Schemata.Definitions.Regex
       import Schemata.Definitions.String
