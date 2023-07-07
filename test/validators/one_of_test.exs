@@ -7,8 +7,24 @@ defmodule Schemata.Validators.OneOfTest do
   describe "when schema matches" do
     test "returns :ok" do
       assert :ok ==
-               %Schema{properties: %{foo: one_of([enum(["a", "b"]), enum(["c", "d"])])}}
-               |> SchemaValidator.validate(%{"foo" => "a"})
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     foo:
+                       one_of([
+                         object(
+                           %{last_name: string()},
+                           required: [:last_name]
+                         ),
+                         object(
+                           %{surname: string()},
+                           required: [:surname]
+                         )
+                       ])
+                   }
+                 },
+                 %{"foo" => %{"last_name" => "Шевченко"}}
+               )
     end
   end
 
@@ -25,8 +41,24 @@ defmodule Schemata.Validators.OneOfTest do
                    rule: :schemata
                  }, "$.foo"}
               ]} ==
-               %Schema{properties: %{foo: one_of([enum(["a", "b"]), enum(["c", "d"])])}}
-               |> SchemaValidator.validate(%{"foo" => "e"})
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     foo:
+                       one_of([
+                         object(
+                           %{last_name: string()},
+                           required: [:last_name]
+                         ),
+                         object(
+                           %{surname: string()},
+                           required: [:surname]
+                         )
+                       ])
+                   }
+                 },
+                 %{"foo" => %{"first_name" => "Тарас"}}
+               )
     end
   end
 end
