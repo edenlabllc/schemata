@@ -13,7 +13,7 @@ defmodule Schemata.Validators.OneOfTest do
   end
 
   describe "when schema does not match" do
-    test "returns :ok" do
+    test "returns {:error, [...]}" do
       assert {:error,
               [
                 {%{
