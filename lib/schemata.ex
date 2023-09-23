@@ -22,7 +22,10 @@ defmodule Schemata do
       import Schemata.Definitions.Time
       import Schemata.Definitions.UUID
 
+      import Schemata.Validators.DateFrom
+      import Schemata.Validators.DateTo
       import Schemata.Validators.Equals
+      import Schemata.Validators.UniqBy
     end
   end
 end
