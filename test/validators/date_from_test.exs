@@ -5,12 +5,24 @@ defmodule Schemata.Validators.DateFromTest do
   use Schemata
 
   describe "when schema matches" do
-    test "returns :ok" do
+    test "returns :ok when equal is not enabled" do
       assert :ok ==
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
                      today: date(callbacks: [date_from(Date.utc_today())])
+                   }
+                 },
+                 %{"today" => Date.utc_today() |> Date.add(1) |> to_string()}
+               )
+    end
+
+    test "returns :ok when equal is enabled" do
+      assert :ok ==
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     today: date(callbacks: [date_from(Date.utc_today(), true)])
                    }
                  },
                  %{"today" => to_string(Date.utc_today())}
