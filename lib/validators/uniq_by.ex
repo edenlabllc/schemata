@@ -8,6 +8,9 @@ defmodule Schemata.Validators.UniqBy do
 end
 
 defimpl Schemata.Validator, for: Schemata.Validators.UniqBy do
+  def validate(_uniq_by, nil, _path),
+    do: :ok
+
   def validate(%{value: value, message: message}, list, path) when is_binary(value) do
     case Enum.uniq_by(list, &Map.get(&1, value)) == list do
       true -> :ok

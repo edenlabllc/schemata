@@ -8,6 +8,9 @@ defmodule Schemata.Validators.RequiredUniqBy do
 end
 
 defimpl Schemata.Validator, for: Schemata.Validators.RequiredUniqBy do
+  def validate(_required_uniq_by, nil, _path),
+    do: :ok
+
   def validate(%{value: {key, value}, message: message}, list, path) do
     case Enum.filter(list, &(Map.get(&1, key) == value)) do
       [_] -> :ok

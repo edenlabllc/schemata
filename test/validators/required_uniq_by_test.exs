@@ -57,4 +57,19 @@ defmodule Schemata.Validators.RequiredUniqByTest do
                )
     end
   end
+
+  describe "when value is not set" do
+    test "returns :ok" do
+      assert :ok =
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     lias:
+                       array(nil, callbacks: [required_uniq_by(&(Map.get(&1, "key") == "key_1"))])
+                   }
+                 },
+                 %{}
+               )
+    end
+  end
 end

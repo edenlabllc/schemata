@@ -12,15 +12,28 @@ defmodule Schemata.Validators.DateTo do
 end
 
 defimpl Schemata.Validator, for: Schemata.Validators.DateTo do
-  def validate(%{value: to, eq: equal, message: message}, date, path) do
-    result = Date.compare(Date.from_iso8601!(date), to)
+  def validate(_date_to, nil, _path),
+    do: :ok
 
-    cond do
-      :lt == result -> :ok
-      equal && :eq == result -> :ok
-      true -> render_error(message, date, path)
+  def validate(%{value: to, eq: equal, message: message}, date, path) do
+    with {:ok, date} <- Date.from_iso8601(date),
+         result <- Date.compare(date, to),
+         :ok <- validate_result(result, equal) do
+      :ok
+    else
+      {:error, :invalid_format} -> :ok
+      {:error, :exceeds_range} -> render_error(message, date, path)
     end
   end
+
+  defp validate_result(:lt, _equal),
+    do: :ok
+
+  defp validate_result(:eq, true),
+    do: :ok
+
+  defp validate_result(_result, _equal),
+    do: {:error, :exceeds_range}
 
   defp render_error(message, date, path) when is_function(message),
     do: message.(date, path)
