@@ -1,4 +1,4 @@
-defmodule Schemata.Validators.RequiredUniqByTest do
+defmodule Schemata.Validators.ObjectUniqByTest do
   @moduledoc false
 
   use ExUnit.Case
@@ -10,7 +10,7 @@ defmodule Schemata.Validators.RequiredUniqByTest do
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
-                     list: array(nil, callbacks: [required_uniq_by({"key", "key_1"})])
+                     list: array(nil, callbacks: [object_uniq_by("key")])
                    }
                  },
                  %{"list" => [%{"key" => "key_1"}, %{"key" => "key_2"}]}
@@ -22,8 +22,7 @@ defmodule Schemata.Validators.RequiredUniqByTest do
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
-                     list:
-                       array(nil, callbacks: [required_uniq_by(&(Map.get(&1, "key") == "key_1"))])
+                     list: array(nil, callbacks: [object_uniq_by(&Map.get(&1, "key"))])
                    }
                  },
                  %{"list" => [%{"key" => "key_1"}, %{"key" => "key_2"}]}
@@ -32,25 +31,24 @@ defmodule Schemata.Validators.RequiredUniqByTest do
   end
 
   describe "when schema does not match" do
-    test "returns 'Only one and unqiue field is required.' when value is a key" do
-      assert "Only one and unqiue field is required." ==
+    test "returns 'Values are not unique.' when value is a key" do
+      assert "Values are not unique." ==
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
-                     list: array(nil, callbacks: [required_uniq_by({"key", "key_1"})])
+                     list: array(nil, callbacks: [object_uniq_by("key")])
                    }
                  },
                  %{"list" => [%{"key" => "key_1"}, %{"key" => "key_1"}]}
                )
     end
 
-    test "returns 'Only one and unqiue field is required.' when value is a function" do
-      assert "Only one and unqiue field is required." ==
+    test "returns 'Values are not unique.' when value is a function" do
+      assert "Values are not unique." ==
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
-                     list:
-                       array(nil, callbacks: [required_uniq_by(&(Map.get(&1, "key") == "key_1"))])
+                     list: array(nil, callbacks: [object_uniq_by(&Map.get(&1, "key"))])
                    }
                  },
                  %{"list" => [%{"key" => "key_1"}, %{"key" => "key_1"}]}
@@ -64,8 +62,7 @@ defmodule Schemata.Validators.RequiredUniqByTest do
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
-                     lias:
-                       array(nil, callbacks: [required_uniq_by(&(Map.get(&1, "key") == "key_1"))])
+                     list: array(nil, callbacks: [object_uniq_by(&Map.get(&1, "key"))])
                    }
                  },
                  %{}

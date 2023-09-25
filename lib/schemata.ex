@@ -25,8 +25,7 @@ defmodule Schemata do
       import Schemata.Validators.DateFrom
       import Schemata.Validators.DateTo
       import Schemata.Validators.Equals
-      import Schemata.Validators.RequiredUniqBy
-      import Schemata.Validators.UniqBy
+      import Schemata.Validators.ObjectUniqBy
     end
   end
 end

@@ -1,13 +1,13 @@
-defmodule Schemata.Validators.UniqBy do
+defmodule Schemata.Validators.ObjectUniqBy do
   @enforce_keys [:value]
 
   defstruct [:value, :message]
 
-  def uniq_by(value, message \\ nil),
+  def object_uniq_by(value, message \\ nil),
     do: %__MODULE__{value: value, message: message || "Values are not unique."}
 end
 
-defimpl Schemata.Validator, for: Schemata.Validators.UniqBy do
+defimpl Schemata.Validator, for: Schemata.Validators.ObjectUniqBy do
   def validate(_uniq_by, nil, _path),
     do: :ok
 
