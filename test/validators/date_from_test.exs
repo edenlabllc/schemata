@@ -31,8 +31,16 @@ defmodule Schemata.Validators.DateFromTest do
   end
 
   describe "when schema does not match" do
-    test "returns 'Date should be greater than or equal to ...'" do
-      assert "Date should be greater than or equal to" <> _ =
+    test "returns error when equal is disabled" do
+      assert [
+               {%{
+                  description: "Date should be greater than" <> _,
+                  params: %{actual: _, expected: _},
+                  raw_description:
+                    ~S(Date should be greater than '#{expected}' but got '#{actual}'.),
+                  rule: :date_from
+                }, "$.date"}
+             ] =
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
@@ -40,6 +48,26 @@ defmodule Schemata.Validators.DateFromTest do
                    }
                  },
                  %{"date" => Date.utc_today() |> Date.add(-1) |> to_string()}
+               )
+    end
+
+    test "returns error when equal is enabled" do
+      assert [
+               {%{
+                  description: "Date should be greater than or equal to" <> _,
+                  params: %{actual: _, expected: _},
+                  raw_description:
+                    ~S(Date should be greater than or equal to '#{expected}' but got '#{actual}'.),
+                  rule: :date_from
+                }, "$.date"}
+             ] =
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     date: date(callbacks: [date_from(Date.utc_today(), true)])
+                   }
+                 },
+                 %{"date" => Date.utc_today() |> Date.add(-2) |> to_string()}
                )
     end
   end

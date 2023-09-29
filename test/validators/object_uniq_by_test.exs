@@ -31,8 +31,15 @@ defmodule Schemata.Validators.ObjectUniqByTest do
   end
 
   describe "when schema does not match" do
-    test "returns 'Values are not unique.' when value is a key" do
-      assert "Values are not unique." ==
+    test "returns error when value is a binary" do
+      assert [
+               {%{
+                  description: "Values are not unique by 'key'.",
+                  params: %{value: "key", values: [%{"key" => "key_1"}, %{"key" => "key_1"}]},
+                  raw_description: ~S(Values are not unique by '#{value}'.),
+                  rule: :object_uniq_by
+                }, "$.list"}
+             ] =
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
@@ -43,8 +50,15 @@ defmodule Schemata.Validators.ObjectUniqByTest do
                )
     end
 
-    test "returns 'Values are not unique.' when value is a function" do
-      assert "Values are not unique." ==
+    test "returns error when value is a function" do
+      assert [
+               {%{
+                  description: "Values are not unique.",
+                  params: %{value: nil, values: [%{"key" => "key_1"}, %{"key" => "key_1"}]},
+                  raw_description: "Values are not unique.",
+                  rule: :object_uniq_by
+                }, "$.list"}
+             ] =
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
