@@ -65,10 +65,10 @@ defimpl Schemata.Validator, for: Schemata.Validators.DateTo do
     do: message
 
   defp build_raw_message(nil, true),
-    do: ~S(Date should be less than or equal to '#{expected}' but got '#{actual}'.)
+    do: "Date should be less than or equal to '%{expected}' but got '%{actual}'."
 
   defp build_raw_message(nil, _equal),
-    do: ~S(Date should be less than '#{expected}' but got '#{actual}'.)
+    do: "Date should be less than '%{expected}' but got '%{actual}'."
 
   defp build_raw_message(message, _equal),
     do: message

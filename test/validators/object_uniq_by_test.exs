@@ -36,7 +36,7 @@ defmodule Schemata.Validators.ObjectUniqByTest do
                {%{
                   description: "Values are not unique by 'key'.",
                   params: %{value: "key", values: [%{"key" => "key_1"}, %{"key" => "key_1"}]},
-                  raw_description: ~S(Values are not unique by '#{value}'.),
+                  raw_description: "Values are not unique by '%{value}'.",
                   rule: :object_uniq_by
                 }, "$.list"}
              ] =

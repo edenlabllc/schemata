@@ -55,10 +55,10 @@ defimpl Schemata.Validator, for: Schemata.Validators.ObjectUniqBy do
     do: message
 
   defp build_raw_message(nil, value) when is_binary(value),
-    do: ~S(Values are not unique by '#{value}'.)
+    do: "Values are not unique by '%{value}'."
 
   defp build_raw_message(nil, _value),
-    do: ~S(Values are not unique.)
+    do: "Values are not unique."
 
   defp build_raw_message(message, _value),
     do: message
