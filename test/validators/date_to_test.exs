@@ -36,8 +36,7 @@ defmodule Schemata.Validators.DateToTest do
                {%{
                   description: "Date should be less than" <> _,
                   params: %{actual: _, expected: _},
-                  raw_description:
-                    ~S(Date should be less than '#{expected}' but got '#{actual}'.),
+                  raw_description: "Date should be less than '%{expected}' but got '%{actual}'.",
                   rule: :date_from
                 }, "$.date"}
              ] =
@@ -57,7 +56,7 @@ defmodule Schemata.Validators.DateToTest do
                   description: "Date should be less than or equal to" <> _,
                   params: %{actual: _, expected: _},
                   raw_description:
-                    ~S(Date should be less than or equal to '#{expected}' but got '#{actual}'.),
+                    "Date should be less than or equal to '%{expected}' but got '%{actual}'.",
                   rule: :date_from
                 }, "$.date"}
              ] =
