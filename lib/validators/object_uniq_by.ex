@@ -29,20 +29,23 @@ defimpl Schemata.Validator, for: Schemata.Validators.ObjectUniqBy do
     do: message.(value, list, path)
 
   defp render_error(message, value, list, path) do
-    [
-      {
-        %{
-          description: build_message(message, value),
-          params: %{
-            value: value,
-            values: list
+    {
+      :error,
+      [
+        {
+          %{
+            description: build_message(message, value),
+            params: %{
+              value: value,
+              values: list
+            },
+            raw_description: build_raw_message(message, value),
+            rule: :object_uniq_by
           },
-          raw_description: build_raw_message(message, value),
-          rule: :object_uniq_by
-        },
-        path
-      }
-    ]
+          path
+        }
+      ]
+    }
   end
 
   defp build_message(nil, value) when is_binary(value),

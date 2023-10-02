@@ -31,16 +31,17 @@ defmodule Schemata.Validators.DateFromTest do
   end
 
   describe "when schema does not match" do
-    test "returns error when equal is disabled" do
-      assert [
-               {%{
-                  description: "Date should be greater than" <> _,
-                  params: %{actual: _, expected: _},
-                  raw_description:
-                    "Date should be greater than '%{expected}' but got '%{actual}'.",
-                  rule: :date_from
-                }, "$.date"}
-             ] =
+    test "returns {:error, [...]} when equal is disabled" do
+      assert {:error,
+              [
+                {%{
+                   description: "Date should be greater than" <> _,
+                   params: %{actual: _, expected: _},
+                   raw_description:
+                     "Date should be greater than '%{expected}' but got '%{actual}'.",
+                   rule: :date_from
+                 }, "$.date"}
+              ]} =
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
@@ -51,16 +52,17 @@ defmodule Schemata.Validators.DateFromTest do
                )
     end
 
-    test "returns error when equal is enabled" do
-      assert [
-               {%{
-                  description: "Date should be greater than or equal to" <> _,
-                  params: %{actual: _, expected: _},
-                  raw_description:
-                    "Date should be greater than or equal to '%{expected}' but got '%{actual}'.",
-                  rule: :date_from
-                }, "$.date"}
-             ] =
+    test "returns {:error, [...]} when equal is enabled" do
+      assert {:error,
+              [
+                {%{
+                   description: "Date should be greater than or equal to" <> _,
+                   params: %{actual: _, expected: _},
+                   raw_description:
+                     "Date should be greater than or equal to '%{expected}' but got '%{actual}'.",
+                   rule: :date_from
+                 }, "$.date"}
+              ]} =
                SchemaValidator.validate(
                  %Schema{
                    properties: %{

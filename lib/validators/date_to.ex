@@ -39,20 +39,23 @@ defimpl Schemata.Validator, for: Schemata.Validators.DateTo do
     do: message.(equal, expected, actual, path)
 
   defp render_error(message, equal, expected, actual, path) do
-    [
-      {
-        %{
-          description: build_message(message, equal, expected, actual),
-          params: %{
-            expected: expected,
-            actual: actual
+    {
+      :error,
+      [
+        {
+          %{
+            description: build_message(message, equal, expected, actual),
+            params: %{
+              expected: to_string(expected),
+              actual: to_string(actual)
+            },
+            raw_description: build_raw_message(message, equal),
+            rule: :date_from
           },
-          raw_description: build_raw_message(message, equal),
-          rule: :date_from
-        },
-        path
-      }
-    ]
+          path
+        }
+      ]
+    }
   end
 
   defp build_message(nil, true, expected, actual),
