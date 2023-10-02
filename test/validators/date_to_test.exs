@@ -31,15 +31,16 @@ defmodule Schemata.Validators.DateToTest do
   end
 
   describe "when does not match" do
-    test "returns error when equal is disabled" do
-      assert [
-               {%{
-                  description: "Date should be less than" <> _,
-                  params: %{actual: _, expected: _},
-                  raw_description: "Date should be less than '%{expected}' but got '%{actual}'.",
-                  rule: :date_from
-                }, "$.date"}
-             ] =
+    test "returns {:error, [...]} when equal is disabled" do
+      assert {:error,
+              [
+                {%{
+                   description: "Date should be less than" <> _,
+                   params: %{actual: _, expected: _},
+                   raw_description: "Date should be less than '%{expected}' but got '%{actual}'.",
+                   rule: :date_from
+                 }, "$.date"}
+              ]} =
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
@@ -50,16 +51,17 @@ defmodule Schemata.Validators.DateToTest do
                )
     end
 
-    test "returns error when equal is enabled" do
-      assert [
-               {%{
-                  description: "Date should be less than or equal to" <> _,
-                  params: %{actual: _, expected: _},
-                  raw_description:
-                    "Date should be less than or equal to '%{expected}' but got '%{actual}'.",
-                  rule: :date_from
-                }, "$.date"}
-             ] =
+    test "returns {:error, [...]} when equal is enabled" do
+      assert {:error,
+              [
+                {%{
+                   description: "Date should be less than or equal to" <> _,
+                   params: %{actual: _, expected: _},
+                   raw_description:
+                     "Date should be less than or equal to '%{expected}' but got '%{actual}'.",
+                   rule: :date_from
+                 }, "$.date"}
+              ]} =
                SchemaValidator.validate(
                  %Schema{
                    properties: %{
