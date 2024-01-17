@@ -1,4 +1,4 @@
-defmodule Schemata.Validators.OneOfTest do
+defmodule Schemata.Definitions.OneOfTest do
   @moduledoc false
 
   use ExUnit.Case
