@@ -8,7 +8,7 @@ defmodule Schemata.Validators.RequiredOneOf do
 end
 
 defimpl Schemata.Validator, for: Schemata.Validators.RequiredOneOf do
-  def validate(_uniq_by, nil, _path),
+  def validate(_required_one_of, nil, _path),
     do: :ok
 
   def validate(%{properties: properties, message: message}, object, path) do
