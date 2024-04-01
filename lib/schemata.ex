@@ -28,6 +28,7 @@ defmodule Schemata do
       import Schemata.Validators.ObjectUniqBy
       import Schemata.Validators.RequiredOneOf
       import Schemata.Validators.RequiredWith
+      import Schemata.Validators.RequiredItems
     end
   end
 end
