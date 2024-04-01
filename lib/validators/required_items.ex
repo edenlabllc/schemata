@@ -21,12 +21,10 @@ defimpl Schemata.Validator, for: Schemata.Validators.RequiredItems do
           required_values: required_values,
           message: message
         },
-        object,
+        list,
         path
       ) do
-    item_values =
-      object
-      |> Enum.flat_map(fn item -> get_item_value(item, value_path) end)
+    item_values = Enum.flat_map(list, fn item -> get_item_value(item, value_path) end)
 
     case Enum.filter(required_values, fn required_value -> required_value not in item_values end) do
       [_ | _] = items -> render_error(message, items, path)
