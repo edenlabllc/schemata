@@ -3,7 +3,15 @@ defmodule Schemata.Validators.ValidateIf do
 
   @moduledoc """
   Validate list of objects by filters map. If :base_field value is equal to key in filters map,
-  then :filter_field value must match regexp from value in filters map.
+  then :filter_field value must match regexp/string/float comparator or validated by custom function from value in filters map.
+
+  Float comparators:
+  - :eq - equal
+  - :gt - greater than
+  - :gte - greater than or equal
+  - :lt - less than
+  - :lte - less than or equal
+  - :ne - not equal
 
   example:
   if document type is equal to "BIRTH_CERTIFICATE", then document number must match regexp
@@ -14,7 +22,10 @@ defmodule Schemata.Validators.ValidateIf do
             callbacks: [
               validate_if(
                 %{
-                  "BIRTH_CERTIFICATE" => ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u
+                  "BIRTH_CERTIFICATE" => ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u,
+                  "TYPE_VALIDATED_BY_CUSTOM_FUNTION" => &String.starts_with?(&1, "123"),
+                  "TYPE_VALIDATED_BY_FLOAT" => {:gt, 0.0},
+                  "TYPE_VALIDATED_BY_STRING" => "123"
                 },
                 base_field: "type",
                 filter_field: "number"
