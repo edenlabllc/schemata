@@ -29,6 +29,7 @@ defmodule Schemata do
       import Schemata.Validators.RequiredOneOf
       import Schemata.Validators.RequiredWith
       import Schemata.Validators.RequiredItems
+      import Schemata.Validators.ValidateIf
     end
   end
 end
