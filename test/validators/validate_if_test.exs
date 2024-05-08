@@ -342,6 +342,102 @@ defmodule Schemata.Validators.ValidateIfTest do
     end
   end
 
+  describe "when multiple values do not match regex" do
+    test "returns {:error, <error info>}" do
+      assert {:error,
+              [
+                {
+                  %{
+                    description:
+                      "string does not match pattern \"^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\\/()-]){2,25}$\"",
+                    params: %{
+                      filter: "^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\\/()-]){2,25}$",
+                      value: "!WRONG"
+                    },
+                    raw_description: "string does not match pattern \"%{pattern}\"",
+                    rule: :validate_if
+                  },
+                  "$.documents.[0].number"
+                },
+                {
+                  %{
+                    description:
+                      "string does not match pattern \"^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$\"",
+                    params: %{
+                      filter: "^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$",
+                      value: "!ABC"
+                    },
+                    raw_description: "string does not match pattern \"%{pattern}\"",
+                    rule: :validate_if
+                  },
+                  "$.documents.[1].number"
+                }
+              ]} =
+               SchemaValidator.validate(
+                 %Schema{
+                   definitions: %{
+                     document:
+                       object(%{
+                         type: string(null: true),
+                         number: string(null: true)
+                       })
+                   },
+                   properties: %{
+                     documents:
+                       array(ref("document"),
+                         callbacks: [
+                           validate_if(
+                             %{
+                               "PASSPORT" => ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                               "NATIONAL_ID" => ~r/^[0-9]{9}$/u,
+                               "BIRTH_CERTIFICATE" =>
+                                 ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u,
+                               "COMPLEMENTARY_PROTECTION_CERTIFICATE" =>
+                                 ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                               "REFUGEE_CERTIFICATE" => ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                               "TEMPORARY_CERTIFICATE" =>
+                                 ~r/^(((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{4,6}|[0-9]{9}|((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{5}\\\/[0-9]{5})$/u,
+                               "TEMPORARY_PASSPORT" =>
+                                 ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u
+                             },
+                             base_field: "type",
+                             filter_field: "number",
+                             message: fn rule, field_value, filter_field, filter ->
+                               {
+                                 %{
+                                   description: "string does not match pattern \"#{filter}\"",
+                                   params: %{
+                                     value: field_value,
+                                     filter: filter
+                                   },
+                                   raw_description:
+                                     "string does not match pattern \"%{pattern}\"",
+                                   rule: rule
+                                 },
+                                 filter_field
+                               }
+                             end
+                           )
+                         ]
+                       )
+                   }
+                 },
+                 %{
+                   "documents" => [
+                     %{
+                       "type" => "BIRTH_CERTIFICATE",
+                       "number" => "!WRONG"
+                     },
+                     %{
+                       "type" => "COMPLEMENTARY_PROTECTION_CERTIFICATE",
+                       "number" => "!ABC"
+                     }
+                   ]
+                 }
+               )
+    end
+  end
+
   describe "with custom error message function" do
     test "returns {:error, <custom message>}" do
       assert {:error,

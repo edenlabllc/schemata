@@ -63,9 +63,27 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
     do: :ok
 
   def validate(config, value, path) when is_list(value) do
-    value
-    |> Enum.with_index()
-    |> validate_list(config, path)
+    validation_result =
+      value
+      |> Enum.with_index()
+      |> Enum.map(fn {value, index} ->
+        case validate_list([{value, index}], config, path) do
+          :ok ->
+            :ok
+
+          {message, rule, field_value, filter_field, filter} ->
+            render_error(message, rule, field_value, filter_field, filter)
+        end
+      end)
+      |> Enum.reduce({:error, []}, fn
+        {:error, {_, _} = err}, {_, acc} -> {:error, acc ++ [err]}
+        _, acc -> acc
+      end)
+
+    case validation_result do
+      {_, []} -> :ok
+      {_, errors} -> {:error, errors}
+    end
   end
 
   def validate(%{filter_field: filter_field, message: message, rule: rule} = config, value, path)
@@ -87,13 +105,7 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
         validate_list(tail, config, path)
 
       {:error, {:invalid_value, filter, field_value}} ->
-        render_error(
-          message,
-          rule,
-          field_value,
-          "#{path}.[#{index}].#{config.filter_field}",
-          filter
-        )
+        {message, rule, field_value, "#{path}.[#{index}].#{config.filter_field}", filter}
     end
   end
 
