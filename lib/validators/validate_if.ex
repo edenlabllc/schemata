@@ -22,13 +22,38 @@ defmodule Schemata.Validators.ValidateIf do
             callbacks: [
               validate_if(
                 %{
-                  "BIRTH_CERTIFICATE" => ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u,
+                  "PASSPORT" => ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                  "NATIONAL_ID" => ~r/^[0-9]{9}$/u,
+                  "BIRTH_CERTIFICATE" =>
+                    ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u,
+                  "COMPLEMENTARY_PROTECTION_CERTIFICATE" =>
+                    ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                  "REFUGEE_CERTIFICATE" => ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                  "TEMPORARY_CERTIFICATE" =>
+                    ~r/^(((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{4,6}|[0-9]{9}|((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{5}\\\/[0-9]{5})$/u,
+                  "TEMPORARY_PASSPORT" =>
+                    ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u,
                   "TYPE_VALIDATED_BY_CUSTOM_FUNTION" => &String.starts_with?(&1, "123"),
                   "TYPE_VALIDATED_BY_FLOAT" => {:gt, 0.0},
                   "TYPE_VALIDATED_BY_STRING" => "123"
                 },
                 base_field: "type",
-                filter_field: "number"
+                filter_field: "number",
+                message: fn rule, field_value, filter_field, filter ->
+                  {
+                    %{
+                      description: "string does not match pattern \"\#{filter}\"",
+                      params: %{
+                        value: field_value,
+                        filter: filter
+                      },
+                      raw_description:
+                        "string does not match pattern \"%{pattern}\"",
+                      rule: rule
+                    },
+                    filter_field
+                  }
+                end
               )
             ]
           )
@@ -63,26 +88,25 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
     do: :ok
 
   def validate(config, value, path) when is_list(value) do
-    validation_result =
-      value
-      |> Enum.with_index()
-      |> Enum.map(fn {value, index} ->
-        case validate_list([{value, index}], config, path) do
-          :ok ->
-            :ok
+    value
+    |> Enum.with_index()
+    |> Enum.map(fn item ->
+      case validate_list([item], config, path) do
+        :ok ->
+          :ok
 
-          {message, rule, field_value, filter_field, filter} ->
-            render_error(message, rule, field_value, filter_field, filter)
-        end
-      end)
-      |> Enum.reduce({:error, []}, fn
-        {:error, {_, _} = err}, {_, acc} -> {:error, acc ++ [err]}
-        _, acc -> acc
-      end)
-
-    case validation_result do
+        {message, rule, field_value, filter_field, filter} ->
+          render_error(message, rule, field_value, filter_field, filter)
+      end
+    end)
+    |> Enum.reduce({:error, []}, fn
+      {:error, [_ | _] = err}, {_, acc} -> {:error, acc ++ err}
+      {:error, {_, _} = err}, {_, acc} -> {:error, acc ++ [err]}
+      _, acc -> acc
+    end)
+    |> case do
       {_, []} -> :ok
-      {_, errors} -> {:error, errors}
+      errors -> errors
     end
   end
 
