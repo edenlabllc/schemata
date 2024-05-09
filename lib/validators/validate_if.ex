@@ -90,24 +90,7 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
   def validate(config, value, path) when is_list(value) do
     value
     |> Enum.with_index()
-    |> Enum.map(fn item ->
-      case validate_list([item], config, path) do
-        :ok ->
-          :ok
-
-        {message, rule, field_value, filter_field, filter} ->
-          render_error(message, rule, field_value, filter_field, filter)
-      end
-    end)
-    |> Enum.reduce({:error, []}, fn
-      {:error, [_ | _] = err}, {_, acc} -> {:error, acc ++ err}
-      {:error, {_, _} = err}, {_, acc} -> {:error, acc ++ [err]}
-      _, acc -> acc
-    end)
-    |> case do
-      {_, []} -> :ok
-      errors -> errors
-    end
+    |> validate_list(config, path)
   end
 
   def validate(%{filter_field: filter_field, message: message, rule: rule} = config, value, path)
@@ -117,19 +100,40 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
         :ok
 
       {:error, {:invalid_value, filter, field_value}} ->
-        render_error(message, rule, field_value, "#{path}.#{filter_field}", filter)
+        {:error, render_error(message, rule, field_value, "#{path}.#{filter_field}", filter)}
     end
   end
 
-  defp validate_list([], _config, _path), do: :ok
+  defp validate_list(list, config, path) do
+    errors_acc = []
+    validate_list(list, config, path, errors_acc)
+  end
 
-  defp validate_list([{value, index} | tail], %{message: message, rule: rule} = config, path) do
+  defp validate_list([], _config, _path, []), do: :ok
+
+  defp validate_list([], _config, _path, errors_acc), do: {:error, errors_acc}
+
+  defp validate_list(
+         [{value, index} | tail],
+         %{message: message, rule: rule} = config,
+         path,
+         errors_acc
+       ) do
     case validate_map(config, value) do
       :ok ->
-        validate_list(tail, config, path)
+        validate_list(tail, config, path, errors_acc)
 
       {:error, {:invalid_value, filter, field_value}} ->
-        {message, rule, field_value, "#{path}.[#{index}].#{config.filter_field}", filter}
+        error_path = "#{path}.[#{index}].#{config.filter_field}"
+        error = render_error(message, rule, field_value, error_path, filter)
+
+        errors_acc =
+          case error do
+            error when is_list(error) -> error ++ errors_acc
+            error -> [error | errors_acc]
+          end
+
+        validate_list(tail, config, path, errors_acc)
     end
   end
 
@@ -197,25 +201,22 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
   end
 
   defp render_error(message, rule, value, path, filter) when is_function(message),
-    do: {:error, message.(rule, value, path, filter)}
+    do: message.(rule, value, path, filter)
 
   defp render_error(message, rule, value, path, filter) do
-    {
-      :error,
-      [
-        {
-          %{
-            description: message,
-            params: %{
-              value: value,
-              filter: filter
-            },
-            raw_description: message,
-            rule: rule
+    [
+      {
+        %{
+          description: message,
+          params: %{
+            value: value,
+            filter: filter
           },
-          path
-        }
-      ]
-    }
+          raw_description: message,
+          rule: rule
+        },
+        path
+      }
+    ]
   end
 end
