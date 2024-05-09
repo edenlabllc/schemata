@@ -349,19 +349,6 @@ defmodule Schemata.Validators.ValidateIfTest do
                 {
                   %{
                     description:
-                      "string does not match pattern \"^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\\/()-]){2,25}$\"",
-                    params: %{
-                      filter: "^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\\/()-]){2,25}$",
-                      value: "!WRONG"
-                    },
-                    raw_description: "string does not match pattern \"%{pattern}\"",
-                    rule: :validate_if
-                  },
-                  "$.documents.[0].number"
-                },
-                {
-                  %{
-                    description:
                       "string does not match pattern \"^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$\"",
                     params: %{
                       filter: "^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$",
@@ -371,6 +358,19 @@ defmodule Schemata.Validators.ValidateIfTest do
                     rule: :validate_if
                   },
                   "$.documents.[1].number"
+                },
+                {
+                  %{
+                    description:
+                      "string does not match pattern \"^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\\/()-]){2,25}$\"",
+                    params: %{
+                      filter: "^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\\/()-]){2,25}$",
+                      value: "!WRONG"
+                    },
+                    raw_description: "string does not match pattern \"%{pattern}\"",
+                    rule: :validate_if
+                  },
+                  "$.documents.[0].number"
                 }
               ]} =
                SchemaValidator.validate(
