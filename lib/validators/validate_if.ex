@@ -22,13 +22,38 @@ defmodule Schemata.Validators.ValidateIf do
             callbacks: [
               validate_if(
                 %{
-                  "BIRTH_CERTIFICATE" => ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u,
+                  "PASSPORT" => ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                  "NATIONAL_ID" => ~r/^[0-9]{9}$/u,
+                  "BIRTH_CERTIFICATE" =>
+                    ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u,
+                  "COMPLEMENTARY_PROTECTION_CERTIFICATE" =>
+                    ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                  "REFUGEE_CERTIFICATE" => ~r/^((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{6}$/u,
+                  "TEMPORARY_CERTIFICATE" =>
+                    ~r/^(((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{4,6}|[0-9]{9}|((?![ЫЪЭЁ])([А-ЯҐЇІЄ])){2}[0-9]{5}\\\/[0-9]{5})$/u,
+                  "TEMPORARY_PASSPORT" =>
+                    ~r/^((?![ЫЪЭЁыъэё@%&$^#`~:,.*|}{?!])[A-ZА-ЯҐЇІЄ0-9№\\\/()-]){2,25}$/u,
                   "TYPE_VALIDATED_BY_CUSTOM_FUNTION" => &String.starts_with?(&1, "123"),
                   "TYPE_VALIDATED_BY_FLOAT" => {:gt, 0.0},
                   "TYPE_VALIDATED_BY_STRING" => "123"
                 },
                 base_field: "type",
-                filter_field: "number"
+                filter_field: "number",
+                message: fn rule, field_value, filter_field, filter ->
+                  {
+                    %{
+                      description: "string does not match pattern \"\#{filter}\"",
+                      params: %{
+                        value: field_value,
+                        filter: filter
+                      },
+                      raw_description:
+                        "string does not match pattern \"%{pattern}\"",
+                      rule: rule
+                    },
+                    filter_field
+                  }
+                end
               )
             ]
           )
@@ -75,25 +100,40 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
         :ok
 
       {:error, {:invalid_value, filter, field_value}} ->
-        render_error(message, rule, field_value, "#{path}.#{filter_field}", filter)
+        {:error, render_error(message, rule, field_value, "#{path}.#{filter_field}", filter)}
     end
   end
 
-  defp validate_list([], _config, _path), do: :ok
+  defp validate_list(list, config, path) do
+    errors_acc = []
+    validate_list(list, config, path, errors_acc)
+  end
 
-  defp validate_list([{value, index} | tail], %{message: message, rule: rule} = config, path) do
+  defp validate_list([], _config, _path, []), do: :ok
+
+  defp validate_list([], _config, _path, errors_acc), do: {:error, errors_acc}
+
+  defp validate_list(
+         [{value, index} | tail],
+         %{message: message, rule: rule} = config,
+         path,
+         errors_acc
+       ) do
     case validate_map(config, value) do
       :ok ->
-        validate_list(tail, config, path)
+        validate_list(tail, config, path, errors_acc)
 
       {:error, {:invalid_value, filter, field_value}} ->
-        render_error(
-          message,
-          rule,
-          field_value,
-          "#{path}.[#{index}].#{config.filter_field}",
-          filter
-        )
+        error_path = "#{path}.[#{index}].#{config.filter_field}"
+        error = render_error(message, rule, field_value, error_path, filter)
+
+        errors_acc =
+          case error do
+            error when is_list(error) -> error ++ errors_acc
+            error -> [error | errors_acc]
+          end
+
+        validate_list(tail, config, path, errors_acc)
     end
   end
 
@@ -161,25 +201,22 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
   end
 
   defp render_error(message, rule, value, path, filter) when is_function(message),
-    do: {:error, message.(rule, value, path, filter)}
+    do: message.(rule, value, path, filter)
 
   defp render_error(message, rule, value, path, filter) do
-    {
-      :error,
-      [
-        {
-          %{
-            description: message,
-            params: %{
-              value: value,
-              filter: filter
-            },
-            raw_description: message,
-            rule: rule
+    [
+      {
+        %{
+          description: message,
+          params: %{
+            value: value,
+            filter: filter
           },
-          path
-        }
-      ]
-    }
+          raw_description: message,
+          rule: rule
+        },
+        path
+      }
+    ]
   end
 end
