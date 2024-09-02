@@ -9,7 +9,8 @@ defmodule Schemata.Schema do
             required: [],
             minProperties: nil,
             maxProperties: nil,
-            additionalProperties: false
+            additionalProperties: false,
+            callbacks: []
 end
 
 defimpl Jason.Encoder, for: Schemata.Schema do
