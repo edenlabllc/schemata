@@ -14,7 +14,8 @@ defmodule Schemata.SchemaValidator do
       |> Jason.decode!()
       |> NExJsonSchema.Schema.resolve()
 
-    with :ok <- Validator.validate(nex_json_schema, data) do
+    with :ok <- Validator.validate(nex_json_schema, data),
+         :ok <- run_callbacks(schema.callbacks, data, "$") do
       Enum.reduce_while(schema.properties, :ok, fn {k, v}, acc ->
         case validate_field(v, data[to_string(k)], schema.definitions, "$.#{k}") do
           :ok -> {:cont, acc}
