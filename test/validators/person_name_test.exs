@@ -13,7 +13,7 @@ defmodule Schemata.Validators.PersonNameTest do
                      first_name: string(callbacks: [person_name()])
                    }
                  },
-                 %{"first_name" => "Анна-Марія"}
+                 %{"first_name" => "Анна- Марія"}
                )
     end
   end
@@ -62,13 +62,13 @@ defmodule Schemata.Validators.PersonNameTest do
     end
   end
 
-  describe "when there are special characters twice in a row" do
+  describe "when there are same special characters twice in a row" do
     test "returns {:error, [...]}" do
       assert {:error,
               [
                 {%{
-                   description: ~S(String matches pattern '[\s\.\-/']{2,}' but it should not),
-                   params: %{pattern: ~S([\s\.\-/']{2,}), value: "Анна--Марія"},
+                   description: ~S(String matches pattern '([\s\.\-/']\)\1' but it should not),
+                   params: %{pattern: ~S(([\s\.\-/']\)\1), value: "Анна--Марія"},
                    raw_description: "String matches pattern '%{pattern}' but it should not",
                    rule: :regexs
                  }, "$.first_name"}
