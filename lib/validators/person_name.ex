@@ -9,7 +9,7 @@ defmodule Schemata.Validators.PersonName do
         # first character must be a letter
         ~r/^[А-ЩЬЮЯҐЄІЇа-щьюяґєії]/ui,
         # no two or more special characters in a row
-        {:not, ~r/[\s\.\-\/']{2,}/ui},
+        {:not, ~r/([\s\.\-\/'])\1/ui},
         # no special characters at the end except a dot
         {:not, ~r/[\s\-\/']$/ui}
       ],
