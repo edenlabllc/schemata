@@ -357,7 +357,7 @@ defmodule Schemata.Validators.ValidateIfTest do
                     raw_description: "string does not match pattern \"%{pattern}\"",
                     rule: :validate_if
                   },
-                  "$.documents.[1].number"
+                  "$.documents[1].number"
                 },
                 {
                   %{
@@ -370,7 +370,7 @@ defmodule Schemata.Validators.ValidateIfTest do
                     raw_description: "string does not match pattern \"%{pattern}\"",
                     rule: :validate_if
                   },
-                  "$.documents.[0].number"
+                  "$.documents[0].number"
                 }
               ]} =
                SchemaValidator.validate(
