@@ -52,7 +52,7 @@ defmodule Schemata.SchemaValidator do
             # additional items should be validated by static validation
             schema = Enum.at(items, index, Keyword.get(array.opts, :additionalItems, []))
 
-            case validate_field(schema, v, definitions, path <> ".#{index}") do
+            case validate_field(schema, v, definitions, path <> "#{index}") do
               :ok -> {:cont, acc}
               error -> {:halt, error}
             end

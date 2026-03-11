@@ -368,7 +368,7 @@ defmodule NExJsonSchemaTest do
                    params: %{},
                    raw_description: "schema does not allow additional items",
                    rule: :schema
-                 }, "$.ids.[2]"}
+                 }, "$.ids[2]"}
               ]} = Validator.validate(schema, %{"ids" => ["123", 123, 1]})
     end
 

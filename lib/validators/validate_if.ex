@@ -124,7 +124,7 @@ defimpl Schemata.Validator, for: Schemata.Validators.ValidateIf do
         validate_list(tail, config, path, errors_acc)
 
       {:error, {:invalid_value, filter, field_value}} ->
-        error_path = "#{path}.[#{index}].#{config.filter_field}"
+        error_path = "#{path}[#{index}].#{config.filter_field}"
         error = render_error(message, rule, field_value, error_path, filter)
 
         errors_acc =
