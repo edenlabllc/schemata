@@ -52,7 +52,7 @@ defmodule Schemata.SchemaValidator do
             # additional items should be validated by static validation
             schema = Enum.at(items, index, Keyword.get(array.opts, :additionalItems, []))
 
-            case validate_field(schema, v, definitions, path <> "#{index}") do
+            case validate_field(schema, v, definitions, path <> "[#{index}]") do
               :ok -> {:cont, acc}
               error -> {:halt, error}
             end
@@ -70,8 +70,10 @@ defmodule Schemata.SchemaValidator do
     case run_callbacks(Keyword.get(opts, :callbacks), data, path) do
       :ok ->
         if is_list(data) do
-          Enum.reduce_while(data, :ok, fn v, acc ->
-            case validate_field(item, v, definitions, path <> ".0") do
+          data
+          |> Enum.with_index()
+          |> Enum.reduce_while(:ok, fn {v, index}, acc ->
+            case validate_field(item, v, definitions, path <> "[#{index}]") do
               :ok -> {:cont, acc}
               error -> {:halt, error}
             end
