@@ -102,4 +102,125 @@ defmodule Schemata.Validators.RequiredIfTest do
                )
     end
   end
+
+  describe "when required value is missed and condition works (list with 1 element)" do
+    test "returns {:error, [...]}" do
+      assert {:error,
+              [
+                {%{
+                   description: "Field 'alias' is required when 'type' = \"THIRD_PERSON\"",
+                   params: %{
+                     field: "alias",
+                     required_if_field: "type",
+                     required_if_value: "THIRD_PERSON"
+                   },
+                   raw_description:
+                     "Field '%{field}' is required when '%{required_if_field}' = %{required_if_value}",
+                   rule: :required
+                 }, "$.person.authentication_methods[0].alias"}
+              ]} =
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     person:
+                       object(%{
+                         authentication_methods:
+                           array(
+                             object(
+                               %{
+                                 type: string(),
+                                 phone_number: regex("^\\+38[0-9]{10}$"),
+                                 value: string(),
+                                 alias: string(minLength: 1, maxLength: 255)
+                               },
+                               required: [:type],
+                               callbacks: [
+                                 required_if(:alias, :type, "THIRD_PERSON"),
+                                 required_if(:value, :type, "THIRD_PERSON"),
+                                 required_if(:phone_number, :type, "OTP")
+                               ]
+                             ),
+                             minItems: 1
+                           )
+                       })
+                   }
+                 },
+                 %{
+                   "person" => %{
+                     "authentication_methods" => [
+                       %{
+                         "type" => "THIRD_PERSON",
+                         "value" => "123"
+                       }
+                     ]
+                   }
+                 }
+               )
+    end
+  end
+
+  describe "when required value is missed and condition works (list with more than 1 element)" do
+    test "returns {:error, [...]}" do
+      assert {:error,
+              [
+                {%{
+                   description: "Field 'alias' is required when 'type' = \"THIRD_PERSON\"",
+                   params: %{
+                     field: "alias",
+                     required_if_field: "type",
+                     required_if_value: "THIRD_PERSON"
+                   },
+                   raw_description:
+                     "Field '%{field}' is required when '%{required_if_field}' = %{required_if_value}",
+                   rule: :required
+                 }, "$.person.authentication_methods[1].alias"}
+              ]} =
+               SchemaValidator.validate(
+                 %Schema{
+                   properties: %{
+                     person:
+                       object(%{
+                         authentication_methods:
+                           array(
+                             object(
+                               %{
+                                 type: string(),
+                                 phone_number: regex("^\\+38[0-9]{10}$"),
+                                 value: string(),
+                                 alias: string(minLength: 1, maxLength: 255)
+                               },
+                               required: [:type],
+                               callbacks: [
+                                 required_if(:alias, :type, "THIRD_PERSON"),
+                                 required_if(:value, :type, "THIRD_PERSON"),
+                                 required_if(:phone_number, :type, "OTP")
+                               ]
+                             ),
+                             minItems: 1
+                           )
+                       })
+                   }
+                 },
+                 %{
+                   "person" => %{
+                     "authentication_methods" => [
+                       %{
+                         "type" => "THIRD_PERSON",
+                         "value" => "123",
+                         "alias" => "alias"
+                       },
+                       %{
+                         "type" => "THIRD_PERSON",
+                         "value" => "321"
+                       },
+                       %{
+                         "type" => "THIRD_PERSON",
+                         "value" => "321"
+                       }
+                     ]
+                   }
+                 }
+               )
+    end
+  end
 end
