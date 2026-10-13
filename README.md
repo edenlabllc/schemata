@@ -27,7 +27,7 @@ custom callbacks, returning `:ok` or `{:error, errors}`.
 
 The engine under `Schemata.JsonSchema` is derived from
 [`ex_json_schema`](https://github.com/jonasschmidt/ex_json_schema).
-Its original [MIT license](lib/json_schema/LICENSE) is preserved alongside the code.
+Its original MIT notice is preserved in the [source header](lib/json_schema.ex).
 
 Remote `$ref` resolution requires a resolver that returns a decoded schema map.
 Configure it as a function of one argument or a `{module, function}` tuple:
