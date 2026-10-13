@@ -107,23 +107,16 @@ defmodule Schemata.JsonSchema.RemoteSchemaTest do
   @remote_url "https://schemas.example.test/integer.json"
 
   setup do
-    original_config =
-      for app <- [:schemata, :nex_json_schema] do
-        {app, Application.fetch_env(app, :remote_schema_resolver)}
-      end
+    original_config = Application.fetch_env(:schemata, :remote_schema_resolver)
 
     on_exit(fn ->
-      for {app, value} <- original_config do
-        case value do
-          {:ok, resolver} -> Application.put_env(app, :remote_schema_resolver, resolver)
-          :error -> Application.delete_env(app, :remote_schema_resolver)
-        end
+      case original_config do
+        {:ok, resolver} -> Application.put_env(:schemata, :remote_schema_resolver, resolver)
+        :error -> Application.delete_env(:schemata, :remote_schema_resolver)
       end
     end)
 
-    for app <- [:schemata, :nex_json_schema] do
-      Application.delete_env(app, :remote_schema_resolver)
-    end
+    Application.delete_env(:schemata, :remote_schema_resolver)
 
     :ok
   end
@@ -154,32 +147,6 @@ defmodule Schemata.JsonSchema.RemoteSchemaTest do
 
   test "uses a resolver configured as a module and function" do
     Application.put_env(:schemata, :remote_schema_resolver, {__MODULE__, :resolve_integer_schema})
-
-    schema = Schema.resolve(%{"$ref" => @remote_url})
-
-    assert schema.refs == %{@remote_url => %{"type" => "integer"}}
-    assert :ok = Validator.validate(schema, 1)
-  end
-
-  test "uses the legacy resolver configuration when no schemata resolver is configured" do
-    Application.put_env(
-      :nex_json_schema,
-      :remote_schema_resolver,
-      {__MODULE__, :resolve_integer_schema}
-    )
-
-    schema = Schema.resolve(%{"$ref" => @remote_url})
-
-    assert schema.refs == %{@remote_url => %{"type" => "integer"}}
-    assert :ok = Validator.validate(schema, 1)
-  end
-
-  test "prefers the schemata resolver over the legacy resolver" do
-    Application.put_env(:schemata, :remote_schema_resolver, {__MODULE__, :resolve_integer_schema})
-
-    Application.put_env(:nex_json_schema, :remote_schema_resolver, fn _ ->
-      %{"type" => "string"}
-    end)
 
     schema = Schema.resolve(%{"$ref" => @remote_url})
 

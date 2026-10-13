@@ -204,7 +204,6 @@ defmodule Schemata.JsonSchema.Schema do
 
   defp remote_schema_resolver do
     Application.get_env(:schemata, :remote_schema_resolver) ||
-      Application.get_env(:nex_json_schema, :remote_schema_resolver) ||
       fn _url -> raise UndefinedRemoteSchemaResolverError end
   end
 
