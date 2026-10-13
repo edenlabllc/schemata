@@ -24,13 +24,13 @@ defmodule Schemata.JsonSchema.Schema do
   @current_draft_schema_url "http://json-schema.org/schema"
   @draft4_schema_url "http://json-schema.org/draft-04/schema"
 
-  @spec resolve(Root.t()) :: Root.t() | no_return
+  @spec resolve(Root.t() | Schemata.JsonSchema.json()) :: Root.t() | no_return()
   def resolve(root = %Root{}), do: resolve_root(root)
 
-  @spec resolve(Schemata.JsonSchema.json()) :: Root.t() | no_return
   def resolve(schema = %{}), do: resolve_root(%Root{schema: schema})
 
-  @spec get_ref_schema(Root.t(), [:root | String.t()]) :: Schemata.JsonSchema.json()
+  @spec get_ref_schema(Root.t(), [:root | String.t() | non_neg_integer()]) ::
+          Schemata.JsonSchema.json_value()
   def get_ref_schema(root = %Root{}, ref = [:root | path]) do
     get_ref_schema_with_schema(root.schema, path, ref)
   end

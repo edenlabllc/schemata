@@ -9,12 +9,19 @@ defmodule Schemata.JsonSchema.Validator do
   alias Schemata.JsonSchema.Validator.Properties
   alias Schemata.JsonSchema.Validator.Type
 
-  @type errors :: [{String.t(), String.t()}] | []
-  @type errors_with_list_paths :: [{String.t(), [String.t() | integer]}] | []
+  @type error_details :: %{
+          rule: atom(),
+          params: map(),
+          description: String.t(),
+          raw_description: String.t()
+        }
+  @type errors :: [{error_details(), String.t()}]
+  @type errors_with_list_paths :: [{error_details(), [String.t() | integer()]}]
 
   @path_item_regex ~r/^(\[\d+\]|\$)$/
 
-  @spec validate(Root.t(), Schemata.JsonSchema.data()) :: :ok | {:error, errors}
+  @spec validate(Root.t() | Schemata.JsonSchema.json(), Schemata.JsonSchema.data()) ::
+          :ok | {:error, errors()}
   def validate(root = %Root{}, data) do
     errors = root |> validate(root.schema, data, ["$"]) |> errors_with_string_paths
 
@@ -24,26 +31,24 @@ defmodule Schemata.JsonSchema.Validator do
     end
   end
 
-  @spec validate(Schemata.JsonSchema.json(), Schemata.JsonSchema.data()) :: :ok | {:error, errors}
   def validate(schema = %{}, data) do
     validate(Schema.resolve(schema), data)
   end
 
-  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.data(), [String.t() | integer]) ::
-          errors_with_list_paths
+  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.data(), [String.t() | integer()]) ::
+          errors_with_list_paths()
   def validate(root, schema, data, path \\ []) do
     schema
     |> Enum.flat_map(&validate_aspect(root, schema, &1, data))
     |> Enum.map(fn {%{} = rules, p} -> {rules, path ++ p} end)
   end
 
-  @spec valid?(Root.t(), Schemata.JsonSchema.data()) :: boolean
+  @spec valid?(Root.t() | Schemata.JsonSchema.json(), Schemata.JsonSchema.data()) :: boolean()
   def valid?(root = %Root{}, data), do: valid?(root, root.schema, data)
 
-  @spec valid?(Schemata.JsonSchema.json(), Schemata.JsonSchema.data()) :: boolean
   def valid?(schema = %{}, data), do: valid?(Schema.resolve(schema), data)
 
-  @spec valid?(Root.t(), Schema.resolved(), Schemata.JsonSchema.data()) :: boolean
+  @spec valid?(Root.t(), Schema.resolved(), Schemata.JsonSchema.data()) :: boolean()
   def valid?(root, schema, data), do: root |> validate(schema, data) |> Enum.empty?()
 
   defp errors_with_string_paths(errors) do

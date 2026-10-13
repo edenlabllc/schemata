@@ -2,9 +2,10 @@ defmodule Schemata.JsonSchema.Validator.Dependencies do
   @moduledoc false
 
   alias Schemata.JsonSchema.Schema
+  alias Schemata.JsonSchema.Schema.Root
   alias Schemata.JsonSchema.Validator
 
-  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.json()) ::
+  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.data()) ::
           Validator.errors_with_list_paths()
   def validate(root, dependencies, data) when is_map(data) do
     dependencies
@@ -14,7 +15,6 @@ defmodule Schemata.JsonSchema.Validator.Dependencies do
     end)
   end
 
-  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.data()) :: []
   def validate(_, _, _), do: []
 
   defp validate_dependency(root, _, schema, data) when is_map(schema) do

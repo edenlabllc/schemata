@@ -1,10 +1,10 @@
 defmodule Schemata.SchemaValidator do
   @moduledoc false
 
-  alias Schemata.JsonSchema.Validator
   alias Schemata.Definitions.Array
   alias Schemata.Definitions.Object
   alias Schemata.Definitions.Ref
+  alias Schemata.JsonSchema.Validator
   alias Schemata.Schema
 
   def validate(%Schema{} = schema, data) do

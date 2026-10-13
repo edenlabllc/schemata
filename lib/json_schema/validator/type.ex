@@ -3,7 +3,8 @@ defmodule Schemata.JsonSchema.Validator.Type do
 
   alias Schemata.JsonSchema.Validator
 
-  @spec validate(String.t(), Schemata.JsonSchema.data()) :: Validator.errors_with_list_paths()
+  @spec validate(String.t() | [String.t()], Schemata.JsonSchema.data()) ::
+          Validator.errors_with_list_paths()
   def validate(type, data) do
     case valid?(type, data) do
       true ->

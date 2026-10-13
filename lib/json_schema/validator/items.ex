@@ -2,9 +2,10 @@ defmodule Schemata.JsonSchema.Validator.Items do
   @moduledoc false
 
   alias Schemata.JsonSchema.Schema
+  alias Schemata.JsonSchema.Schema.Root
   alias Schemata.JsonSchema.Validator
 
-  @spec validate(Root.t(), Schema.resolved(), [Schemata.JsonSchema.data()]) ::
+  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.data()) ::
           Validator.errors_with_list_paths()
   def validate(root, %{"items" => schema = %{}}, items) when is_list(items) do
     items
@@ -14,8 +15,6 @@ defmodule Schemata.JsonSchema.Validator.Items do
     end)
   end
 
-  @spec validate(Root.t(), Schema.resolved(), [Schemata.JsonSchema.data()]) ::
-          Validator.errors_with_list_paths()
   def validate(root, %{"items" => schemata, "additionalItems" => additional_items}, items)
       when is_list(items) and is_list(schemata) do
     items
@@ -26,7 +25,6 @@ defmodule Schemata.JsonSchema.Validator.Items do
     end)
   end
 
-  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.data()) :: []
   def validate(_, _, _), do: []
 
   defp validate_item(_, nil, _, index) do

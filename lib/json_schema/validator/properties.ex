@@ -2,9 +2,10 @@ defmodule Schemata.JsonSchema.Validator.Properties do
   @moduledoc false
 
   alias Schemata.JsonSchema.Schema
+  alias Schemata.JsonSchema.Schema.Root
   alias Schemata.JsonSchema.Validator
 
-  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.json()) ::
+  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.data()) ::
           Validator.errors_with_list_paths()
   def validate(root, schema, properties = %{}) do
     validated_known_properties = validate_known_properties(root, schema, properties)
@@ -17,7 +18,6 @@ defmodule Schemata.JsonSchema.Validator.Properties do
       )
   end
 
-  @spec validate(Root.t(), Schema.resolved(), Schemata.JsonSchema.data()) :: []
   def validate(_, _, _), do: []
 
   defp validate_known_properties(root, schema, properties) do

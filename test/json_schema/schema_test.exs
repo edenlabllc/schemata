@@ -1,4 +1,6 @@
 defmodule Schemata.JsonSchema.SchemaTest do
+  @moduledoc false
+
   use ExUnit.Case, async: true
 
   alias Schemata.JsonSchema.Schema
@@ -99,6 +101,8 @@ defmodule Schemata.JsonSchema.SchemaTest do
 end
 
 defmodule Schemata.JsonSchema.RemoteSchemaTest do
+  @moduledoc false
+
   use ExUnit.Case
 
   alias Schemata.JsonSchema.Schema
