@@ -1,9 +1,9 @@
-defmodule NExJsonSchemaTest do
+defmodule Schemata.JsonSchemaTest do
   @moduledoc false
 
   use ExUnit.Case
   use Schemata
-  alias NExJsonSchema.Validator
+  alias Schemata.JsonSchema.Validator
 
   describe "test create schema" do
     test "success" do
@@ -25,7 +25,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -64,7 +64,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -97,7 +97,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -128,7 +128,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -155,7 +155,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -178,7 +178,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -201,7 +201,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -224,7 +224,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -247,7 +247,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -271,7 +271,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -299,7 +299,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -333,7 +333,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -359,7 +359,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -382,7 +382,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -405,7 +405,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -428,7 +428,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -451,7 +451,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -474,7 +474,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -504,7 +504,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -527,7 +527,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -551,7 +551,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -575,7 +575,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -598,7 +598,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -625,7 +625,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [
@@ -652,7 +652,7 @@ defmodule NExJsonSchemaTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert {:error,
               [

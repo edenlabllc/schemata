@@ -3,7 +3,7 @@ defmodule NullableFieldsTest do
 
   use ExUnit.Case
   use Schemata
-  alias NExJsonSchema.Validator
+  alias Schemata.JsonSchema.Validator
 
   describe "test nullable fields" do
     test "success" do
@@ -31,7 +31,7 @@ defmodule NullableFieldsTest do
         }
         |> Jason.encode!()
         |> Jason.decode!()
-        |> NExJsonSchema.Schema.resolve()
+        |> Schemata.JsonSchema.Schema.resolve()
 
       assert :ok =
                Validator.validate(schema, %{

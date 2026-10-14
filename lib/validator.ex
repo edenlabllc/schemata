@@ -1,20 +1,20 @@
 defmodule Schemata.SchemaValidator do
   @moduledoc false
 
-  alias NExJsonSchema.Validator
   alias Schemata.Definitions.Array
   alias Schemata.Definitions.Object
   alias Schemata.Definitions.Ref
+  alias Schemata.JsonSchema.Validator
   alias Schemata.Schema
 
   def validate(%Schema{} = schema, data) do
-    nex_json_schema =
+    json_schema =
       schema
       |> Jason.encode!()
       |> Jason.decode!()
-      |> NExJsonSchema.Schema.resolve()
+      |> Schemata.JsonSchema.Schema.resolve()
 
-    with :ok <- Validator.validate(nex_json_schema, data),
+    with :ok <- Validator.validate(json_schema, data),
          :ok <- run_callbacks(schema.callbacks, data, "$") do
       Enum.reduce_while(schema.properties, :ok, fn {k, v}, acc ->
         case validate_field(v, data[to_string(k)], schema.definitions, "$.#{k}") do
